@@ -1,0 +1,467 @@
+<%- include('../includes/head', {
+  title: 'Beauty Medica Center | ESMA tretmani i masaže',
+  description: 'Ruski ESMA profesionalni elektrostimulator, limfodrenaža, lifting, elektrolipoliza i profesionalne masaže. Rezervišite termin već od 1200 RSD.'
+}) %>
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<!-- Naš prilagođeni CSS -->
+<link rel="stylesheet" href="/css/wellness.css">
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold fs-4" href="/">
+      <i class="bi bi-flower2 text-primary me-2"></i>Beauty Medica
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarMain">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-3">
+        <li class="nav-item"><a class="nav-link" href="#esma">ESMA tretmani</a></li>
+        <li class="nav-item"><a class="nav-link" href="#massage">Masaže</a></li>
+        <li class="nav-item"><a class="nav-link" href="#experts">Stručnjaci</a></li>
+        <li class="nav-item"><a class="nav-link" href="#blog">Blog</a></li>
+        <li class="nav-item"><a class="btn btn-primary btn-sm rounded-pill px-4" href="#contact">Rezerviši</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO sa centralnom slikom -->
+<section class="py-5 text-center">
+  <div class="container py-4">
+    <h1 class="display-4 fw-bold">Beauty Medica Center</h1>
+    <p class="lead fs-4">Najnovija tehnologija u službi lepote i zdravlja – ruski ESMA profesionalni elektrostimulator</p>
+    <div class="mt-4">
+      <a href="#contact" class="btn btn-primary btn-lg me-3 rounded-pill px-5">Zakaži termin</a>
+      <a href="#esma" class="btn btn-outline-secondary btn-lg rounded-pill px-4">Saznaj više</a>
+    </div>
+    <div class="mt-5">
+      <img src="https://images.pexels.com/photos/3757955/young-woman-getting-massage-while-lying-on-massage-bed-in-spa-salon-3757955.jpg?auto=compress&cs=tinysrgb&w=1200" alt="Wellness tretman" class="img-fluid rounded-4 shadow-lg" style="max-height: 450px; width: 100%; object-fit: cover;">
+    </div>
+    <div class="row mt-5 g-4 justify-content-center">
+      <div class="col-md-3 col-6"><i class="bi bi-star-fill text-primary fs-2"></i><p class="mt-2 fw-semibold">ESMA tehnologija</p></div>
+      <div class="col-md-3 col-6"><i class="bi bi-heart-pulse-fill text-primary fs-2"></i><p class="mt-2 fw-semibold">Medicinski pristup</p></div>
+      <div class="col-md-3 col-6"><i class="bi bi-graph-up-arrow text-primary fs-2"></i><p class="mt-2 fw-semibold">Brzi rezultati</p></div>
+      <div class="col-md-3 col-6"><i class="bi bi-person-check-fill text-primary fs-2"></i><p class="mt-2 fw-semibold">Individualni plan</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ESMA TRETMANI – FEATURES LAYOUT (tekst levo, kartice desno) ========== -->
+<section id="esma" class="py-5 features-bg">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-5">
+        <span class="badge-feature mb-3 d-inline-block" style="background: rgba(255,255,240,0.9);"><i class="bi bi-cpu me-1"></i> Ruski profesionalni aparat</span>
+        <h2 class="fw-bold display-6">ESMA kompleks</h2>
+        <p class="lead">Kompjuterski elektrostimulator sa 10+ režima – za telo, lice i potpuno opuštanje.</p>
+        <p class="mb-4">Od miostimulacije do limfodrenaže, elektrolipolize i liftinga – sve u jednom aparatu. Otkrijte kako najnovija tehnologija može da transformiše vaše telo bez bola i operacija.</p>
+        <a href="#contact" class="btn btn-primary btn-lg rounded-pill px-5">Zakaži konsultaciju</a>
+      </div>
+      <div class="col-lg-7">
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="card feature-card-transparent h-100 p-3 text-center">
+              <i class="bi bi-lightning-charge fs-1 text-primary"></i>
+              <h4 class="mt-2">Miostimulacija</h4>
+              <p>Modeliranje mišića i povećanje mišićne mase.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card feature-card-transparent h-100 p-3 text-center">
+              <i class="bi bi-droplet-half fs-1 text-primary"></i>
+              <h4 class="mt-2">Limfodrenaža</h4>
+              <p>Izbacivanje toksina i viška tečnosti.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card feature-card-transparent h-100 p-3 text-center">
+              <i class="bi bi-arrow-up-circle fs-1 text-primary"></i>
+              <h4 class="mt-2">Lifting</h4>
+              <p>Povećanje tonusa i elastičnosti kože.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card feature-card-transparent h-100 p-3 text-center">
+              <i class="bi bi-fire fs-1 text-primary"></i>
+              <h4 class="mt-2">Elektrolipoliza</h4>
+              <p>Lokalno sagorevanje masnoće.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card feature-card-transparent h-100 p-3 text-center">
+              <i class="bi bi-gem fs-1 text-primary"></i>
+              <h4 class="mt-2">Mikrostruje</h4>
+              <p>Podmlađivanje lica – „Hir kraljice“.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card feature-card-transparent h-100 p-3 text-center">
+              <i class="bi bi-soundwave fs-1 text-primary"></i>
+              <h4 class="mt-2">Ultrazvuk + Laser</h4>
+              <p>Terapija dubokog tkiva.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cenovnik ESMA -->
+    <div class="text-center mt-5 pt-4">
+      <h3 class="mb-4 fw-bold text-white">Cene ESMA tretmana</h3>
+      <div class="row g-4 justify-content-center">
+        <div class="col-md-4">
+          <div class="card p-3 shadow-sm feature-card-transparent">
+            <div class="card-body">
+              <h4>1 tretman</h4>
+              <h2 class="text-primary fw-bold">1.200 RSD</h2>
+              <a href="#contact" class="btn btn-outline-primary rounded-pill px-4">Izaberi</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-top-primary shadow-lg">
+            <div class="card-body">
+              <span class="badge bg-primary text-white mb-2">NAJBOLJE</span>
+              <h4>5 tretmana</h4>
+              <h2 class="text-primary fw-bold">5.000 RSD</h2>
+              <a href="#contact" class="btn btn-primary rounded-pill px-4">Izaberi</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card p-3 shadow-sm feature-card-transparent">
+            <div class="card-body">
+              <h4>10 tretmana</h4>
+              <h2 class="text-primary fw-bold">9.000 RSD</h2>
+              <a href="#contact" class="btn btn-outline-primary rounded-pill px-4">Izaberi</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="table-responsive mt-5">
+        <table class="table table-bordered bg-white rounded-4 overflow-hidden">
+          <thead><tr><th></th><th>Basic</th><th>Pro</th><th>Premium</th></tr></thead>
+          <tbody>
+            <tr><td>Trajanje</td><td>20 min</td><td>30 min</td><td>45 min</td></tr>
+            <tr><td>Efekat zatezanja</td><td>✔</td><td>✔✔</td><td>✔✔✔</td></tr>
+            <tr><td>Limfodrenaža</td><td>-</td><td>✔</td><td>✔✔</td></tr>
+            <tr><td>Kombinovani režimi</td><td>1</td><td>3</td><td>5+</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ISKUSTVA -->
+<section class="py-5 text-center bg-dark-custom">
+  <div class="container">
+    <h2 class="text-white mb-5">Iskustva klijenata</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="bg-white text-dark p-4 rounded-4 h-100">
+          <div class="text-warning mb-2"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+          <p>"Posle samo 3 tretmana ESMA-om, stomak mi je ravniji, koža zategnutija. Neverovatno!"</p>
+          <strong>- Milica R.</strong>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="bg-white text-dark p-4 rounded-4 h-100">
+          <div class="text-warning mb-2"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+          <p>"Mikrostruje lica su me podmladile bez boli. Osećam se kao posle odmora."</p>
+          <strong>- Tatjana K.</strong>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="bg-white text-dark p-4 rounded-4 h-100">
+          <div class="text-warning mb-2"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+          <p>"Sportska masaža + limfodrenaža – oporavak posle treninga nikad brži."</p>
+          <strong>- Stefan L.</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== MASAŽE – obrnut redosled (kartice levo, tekst desno) ========== -->
+<section id="massage" class="py-5 massage-bg">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="card h-100 p-3 text-center">
+              <i class="bi bi-flower1 fs-1 text-primary"></i>
+              <h5 class="mt-2">Relax masaža</h5>
+              <p class="small">Duboko opuštanje, vibraciona tehnika</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card h-100 p-3 text-center">
+              <i class="bi bi-activity fs-1 text-primary"></i>
+              <h5>Sportska masaža</h5>
+              <p class="small">Oporavak mišića, poboljšanje cirkulacije</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card h-100 p-3 text-center">
+              <i class="bi bi-droplet fs-1 text-primary"></i>
+              <h5>Anticelulit masaža</h5>
+              <p class="small">Oblikovanje tela, smanjenje masnih naslaga</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card h-100 p-3 text-center">
+              <i class="bi bi-emoji-sunglasses fs-1 text-primary"></i>
+              <h5>Masaža lica</h5>
+              <p class="small">Podmlađivanje, lifting efekat</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <span class="badge-feature mb-3 d-inline-block"><i class="bi bi-hand-index-thumb"></i> Terapijske i relaks masaže</span>
+        <h2 class="fw-bold display-6">Profesionalne masaže</h2>
+        <p class="lead">Od klasične relaksacije do specijalizovanih tehnika – vaše telo zaslužuje najbolje.</p>
+        <a href="#contact" class="btn btn-primary rounded-pill mt-3">Rezerviši masažu</a>
+      </div>
+    </div>
+
+    <!-- Cenovnik masaža -->
+    <div class="text-center mt-5 pt-4">
+      <h3 class="mb-4 fw-bold text-white">Cene masaža</h3>
+      <div class="row g-4 justify-content-center">
+        <div class="col-md-4">
+          <div class="card p-3">
+            <div class="card-body">
+              <h4>30 min</h4>
+              <h3 class="text-primary">1.500 RSD</h3>
+              <a href="#contact" class="btn btn-outline-secondary rounded-pill mt-2">Zakaži</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-top-primary shadow-lg">
+            <div class="card-body">
+              <h4>60 min</h4>
+              <h3 class="text-primary">2.500 RSD</h3>
+              <a href="#contact" class="btn btn-primary rounded-pill mt-2">Zakaži</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card p-3">
+            <div class="card-body">
+              <h4>90 min</h4>
+              <h3 class="text-primary">3.500 RSD</h3>
+              <a href="#contact" class="btn btn-outline-secondary rounded-pill mt-2">Zakaži</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="table-responsive mt-5">
+        <table class="table table-bordered bg-white">
+          <thead><tr><th>Trajanje</th><th>30'</th><th>60'</th><th>90'</th></tr></thead>
+          <tbody><tr><td>Intenzitet opuštanja</td><td>✔</td><td>✔✔</td><td>✔✔✔</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STRUČNJACI – sa bedževima za zvanja -->
+<section id="experts" class="py-5">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-5">Naš stručni tim</h2>
+    <div class="row g-4 text-center">
+      <div class="col-md-3 col-sm-6">
+        <div class="card p-3 h-100">
+          <img src="https://images.pexels.com/photos/5327585/portrait-of-a-female-doctor-5327585.jpg?auto=compress&cs=tinysrgb&w=400" class="rounded-circle mx-auto mb-3" width="130" height="130" style="object-fit: cover;">
+          <h5>Prim. dr Ana Jovanović</h5>
+          <span class="badge bg-light text-dark rounded-pill mt-2">Fizijatar</span>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="card p-3 h-100">
+          <img src="https://images.pexels.com/photos/5452293/doctor-holding-stethoscope-5452293.jpg?auto=compress&cs=tinysrgb&w=400" class="rounded-circle mx-auto mb-3" width="130" height="130" style="object-fit: cover;">
+          <h5>Dr Marko Nikolić</h5>
+          <span class="badge bg-light text-dark rounded-pill mt-2">Hirurg</span>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="card p-3 h-100">
+          <img src="https://images.pexels.com/photos/4021775/doctor-taking-care-of-patient-4021775.jpg?auto=compress&cs=tinysrgb&w=400" class="rounded-circle mx-auto mb-3" width="130" height="130" style="object-fit: cover;">
+          <h5>Dr Jelena Petrović</h5>
+          <span class="badge bg-light text-dark rounded-pill mt-2">Kardiolog</span>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="card p-3 h-100">
+          <img src="https://images.pexels.com/photos/8456402/young-woman-with-massage-oil-8456402.jpg?auto=compress&cs=tinysrgb&w=400" class="rounded-circle mx-auto mb-3" width="130" height="130" style="object-fit: cover;">
+          <h5>Sofija Milovanović</h5>
+          <span class="badge bg-light text-dark rounded-pill mt-2">Terapeut za masažu</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="py-5">
+  <div class="container">
+    <h2 class="text-center mb-4 fw-bold">Česta pitanja</h2>
+    <div class="accordion" id="faqAccordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">Šta je ESMA aparat?</button></h2>
+        <div id="faq1" class="accordion-collapse collapse show"><div class="accordion-body">Ruski profesionalni kompjuterski elektrostimulator sa više od 10 režima – za mišiće, limfu, lipolizu i podmlađivanje.</div></div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">Da li su tretmani bolni?</button></h2>
+        <div id="faq2" class="accordion-collapse collapse"><div class="accordion-body">Potpuno bezbolni, oseća se prijatna vibracija. Intenzitet se prilagođava vašoj osetljivosti.</div></div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">Kako zakazati?</button></h2>
+        <div id="faq3" class="accordion-collapse collapse"><div class="accordion-body">Pozovite broj 063/75 70 410 ili popunite kontakt formu (u pripremi).</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG – grid kartica, unutar svake horizontalni raspored (slika levo, tekst desno) -->
+<section id="blog" class="py-5">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-5">Wellness blog</h2>
+    <div class="row g-4 blog-grid">
+      <div class="col-md-4">
+        <div class="card shadow-sm p-3 h-100">
+          <div class="blog-horizontal">
+            <div class="blog-img">
+              <img src="https://images.pexels.com/photos/4506102/aromatherapy-oils-and-flowers-4506102.jpg?auto=compress&cs=tinysrgb&w=600" class="img-fluid rounded-4" alt="blog1">
+            </div>
+            <div class="blog-content">
+              <h5 class="card-title">Kako ESMA stimuliše kolagen?</h5>
+              <p class="card-text">Mikrostruje podstiču prirodnu regeneraciju – otkrijte nauku iza liftinga.</p>
+              <a href="#" class="btn btn-outline-secondary rounded-pill btn-sm">Pročitaj više <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm p-3 h-100">
+          <div class="blog-horizontal">
+            <div class="blog-img">
+              <img src="https://images.pexels.com/photos/6738579/woman-receiving-a-massage-6738579.jpg?auto=compress&cs=tinysrgb&w=600" class="img-fluid rounded-4" alt="blog2">
+            </div>
+            <div class="blog-content">
+              <h5 class="card-title">5 razloga za anticelulit masažu</h5>
+              <p class="card-text">Poboljšava cirkulaciju, razbija masne naslage i oblikuje telo.</p>
+              <a href="#" class="btn btn-outline-secondary rounded-pill btn-sm">Pročitaj više <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm p-3 h-100">
+          <div class="blog-horizontal">
+            <div class="blog-img">
+              <img src="https://images.pexels.com/photos/3757951/close-up-of-woman-getting-facial-treatment-3757951.jpg?auto=compress&cs=tinysrgb&w=600" class="img-fluid rounded-4" alt="blog3">
+            </div>
+            <div class="blog-content">
+              <h5 class="card-title">Hir kraljice – zašto ga zovu holivudskim?</h5>
+              <p class="card-text">Trenutno osveženje lica bez igala, omiljeno među poznatima.</p>
+              <a href="#" class="btn btn-outline-secondary rounded-pill btn-sm">Pročitaj više <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== KONTAKT I MAPA (NOVA VERZIJA) ========== -->
+<section id="contact" class="py-5 bg-primary-custom text-white">
+  <div class="container">
+    <div class="row g-5">
+      <!-- Leva kolona: Bootstrap forma -->
+      <div class="col-lg-6">
+        <h2 class="fw-bold mb-4">Kontaktirajte nas</h2>
+        <p class="mb-4">Pošaljite nam poruku, odgovaramo u roku od 24 sata.</p>
+
+        <form action="#" method="post">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="firstName" class="form-label">Ime</label>
+              <input type="text" class="form-control" id="firstName" required>
+            </div>
+            <div class="col-md-6">
+              <label for="lastName" class="form-label">Prezime</label>
+              <input type="text" class="form-control" id="lastName" required>
+            </div>
+            <div class="col-12">
+              <label for="email" class="form-label">Email adresa</label>
+              <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="col-12">
+              <label for="phone" class="form-label">Broj telefona</label>
+              <input type="tel" class="form-control" id="phone">
+            </div>
+            <div class="col-12">
+              <label for="topic" class="form-label">Tema</label>
+              <select class="form-select" id="topic">
+                <option selected>Izaberite...</option>
+                <option>ESMA tretmani</option>
+                <option>Masaže</option>
+                <option>Zakazivanje termina</option>
+                <option>Cene i paketi</option>
+                <option>Ostalo</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label for="message" class="form-label">Poruka</label>
+              <textarea class="form-control" id="message" rows="4" required></textarea>
+            </div>
+            <div class="col-12">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="consent" required>
+                <label class="form-check-label" for="consent">
+                  Slažem se sa obradom ličnih podataka u svrhu odgovora na moj upit.
+                </label>
+              </div>
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-light-custom btn-lg px-5">Pošalji poruku</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Desna kolona: Mapa (OpenStreetMap) -->
+      <div class="col-lg-6">
+        <h2 class="fw-bold mb-4">Pronađite nas</h2>
+        <p class="mb-3">Bulevar oslobođenja 45, Beograd</p>
+        <div class="ratio ratio-16x9 rounded-4 overflow-hidden shadow">
+          <iframe 
+            src="https://www.openstreetmap.org/export/embed.html?bbox=20.456%2C44.797%2C20.468%2C44.804&layer=mapnik&marker=44.8005%2C20.462" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy">
+          </iframe>
+        </div>
+        <p class="mt-3 small">Radno vreme: pon–sub 09–20h</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-dark text-white-50 text-center py-4">
+  <div class="container">
+    <p class="mb-0">© 2026 Beauty Medica Center – Sva prava zadržana. | <i class="bi bi-instagram"></i> <i class="bi bi-facebook ms-2"></i></p>
+  </div>
+</footer>
+
+<%- include('../includes/end') %>

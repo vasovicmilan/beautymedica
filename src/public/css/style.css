@@ -1,0 +1,221 @@
+/* =========================
+   🎨 COLOR SYSTEM
+========================= */
+:root {
+  --primary: #1e3a34;
+  --primary-dark: #142823;
+  --accent: #d4af37;
+  --accent-soft: #f1e5ac;
+  --bg-light: #f8f9fa;
+  --text-dark: #1a1a1a;
+  --text-muted: #6c757d;
+}
+
+/* =========================
+   GLOBAL
+========================= */
+body {
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  font-family: 'Segoe UI', sans-serif;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: 700;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+.navbar {
+  background-color: var(--primary-dark) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* =========================
+   HERO
+========================= */
+section.bg-dark {
+  background: linear-gradient(135deg, #0f1f1c, #1e3a34) !important;
+  padding: 100px 0;
+}
+
+section.bg-dark h1 {
+  font-size: 3rem;
+}
+
+section.bg-dark .lead {
+  opacity: 0.9;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), #b8962e);
+  border: none;
+  color: #000;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #e6c75a, var(--accent));
+  color: #000;
+}
+
+.btn-light {
+  font-weight: 600;
+}
+
+.btn-outline-primary {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+/* =========================
+   SECTIONS
+========================= */
+section {
+  padding: 80px 0;
+}
+
+.bg-light {
+  background-color: #ffffff !important;
+}
+
+/* =========================
+   HEADINGS
+========================= */
+h2 {
+  position: relative;
+}
+
+h2::after {
+  content: "";
+  width: 60px;
+  height: 3px;
+  background: var(--accent);
+  display: block;
+  margin: 10px auto 0;
+}
+
+.text-gold {
+    color: #d4af37;
+}
+
+/* =========================
+   CARDS
+========================= */
+.card {
+  border: none;
+  border-radius: 16px;
+  transition: 0.25s ease;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+}
+
+.card-title {
+  color: var(--primary);
+}
+
+/* =========================
+   TESTIMONIALS
+========================= */
+.card p {
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+/* =========================
+   FAQ
+========================= */
+.accordion-button {
+  font-weight: 600;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: var(--accent-soft);
+  color: #000;
+}
+
+/* =========================
+   BLOG
+========================= */
+.card a {
+  font-weight: 500;
+}
+
+/* =========================
+   CONTACT
+========================= */
+form input,
+form textarea,
+form select {
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+form input:focus,
+form textarea:focus,
+form select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 0.2rem rgba(212,175,55,0.2);
+}
+
+/* =========================
+   BOOKING
+========================= */
+.card.p-4 {
+  border-radius: 20px;
+}
+
+.form-label {
+  font-weight: 600;
+}
+
+.d-flex.flex-wrap button {
+  border-radius: 20px;
+  padding: 6px 14px;
+}
+
+.d-flex.flex-wrap button:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+/* ACTIVE SLOT */
+.d-flex.flex-wrap button.active {
+  background-color: var(--primary);
+  color: white;
+}
+
+/* =========================
+   CTA
+========================= */
+.bg-primary {
+  background: linear-gradient(135deg, var(--primary), #2f5c53) !important;
+}
+
+/* =========================
+   FOOTER
+========================= */
+footer {
+  background-color: var(--primary-dark);
+  font-size: 0.9rem;
+}
