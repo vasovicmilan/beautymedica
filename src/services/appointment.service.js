@@ -37,3 +37,27 @@ export async function rescheduleAppointmentById(id, data) {
         
     }
 }
+
+export async function cancelAppointmentById(params) {
+    try {
+        
+    } catch (error) {
+        
+    }
+}
+
+export async function findAppointmentsByEmployee(employeeId) {
+    try {
+        
+    } catch (error) {
+        
+    }
+}
+
+export async function findAppointmentsByUser(userId) {
+    try {
+        
+    } catch (error) {
+        
+    }
+}

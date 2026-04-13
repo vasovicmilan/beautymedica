@@ -13,3 +13,11 @@ export async function register(params) {
         
     }
 }
+
+export async function logout(params) {
+    try {
+        
+    } catch (error) {
+        
+    }
+}
