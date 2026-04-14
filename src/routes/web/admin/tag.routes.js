@@ -1,38 +1,27 @@
 import { Router } from 'express';
+import {
+  listTags,
+  tagDetail,
+  addTagForm,
+  editTagForm,
+  createTag,
+  updateTag,
+  searchTags,
+  deleteTag,
+} from '../../../controllers/web/admin/tag.controller.js';
 
 const router = Router();
 
-// All tags for admin
-router.get("/", (req, res, next) => {
-    next();
-})
+router.get('/', listTags);
+router.get('/detalji/:tagId', tagDetail);
+router.get('/dodavanje', addTagForm);
+router.get('/izmena/:tagId', editTagForm);
 
-router.get("/detalji/:tagId", (req, res, next) => {
-    next();
-})
+router.post('/dodavanje', createTag);
+router.post('/pretraga', searchTags);
 
-router.get("/dodavanje", (req, res, next) => {
-    next();
-})
+router.put('/izmena', updateTag);
 
-router.get("/izmena/:tagId", (req, res, next) => {
-    next();
-})
-
-router.post("/dodavanje", (req, res, next) => {
-    next();
-})
-
-router.put("/izmena", (req, res, next) => {
-    next();
-})
-
-router.post("/pretraga", (req, res, next) => {
-    next();
-})
-
-router.delete("/brisanje/:tagId", (req, res, next) => {
-    next();
-})
+router.delete('/brisanje', deleteTag);
 
 export default router;

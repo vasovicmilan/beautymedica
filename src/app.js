@@ -18,6 +18,7 @@ import { setupViewEngine } from "./config/view.engine.config.js";
 import logger from "./config/logger.config.js";
 
 import { csrfLocals, csrfWebOnly } from "./config/csrf.config.js";
+import { globalErrorHandler, notFoundHandler } from "./src/utils/error.util.js";
 
 dotenv.config();
 
@@ -54,6 +55,10 @@ setupLocals(app);
 app.use(httpLogger);
 
 app.use(routes);
+
+app.use(notFoundHandler);
+
+app.use(globalErrorHandler);
 
 const PORT = process.env.PORT || 3000;
 

@@ -1,38 +1,27 @@
 import { Router } from 'express';
+import {
+  listServices,
+  serviceDetail,
+  addServiceForm,
+  editServiceForm,
+  createService,
+  updateService,
+  searchServices,
+  deleteService,
+} from '../../../controllers/web/admin/service.controller.js';
 
 const router = Router();
 
-// All services for admin
-router.get("/", (req, res, next) => {
-    next();
-})
+router.get('/', listServices);
+router.get('/detalji/:serviceId', serviceDetail);
+router.get('/dodavanje', addServiceForm);
+router.get('/izmena/:serviceId', editServiceForm);
 
-router.get("/detalji/:serviceId", (req, res, next) => {
-    next();
-})
+router.post('/dodavanje', createService);
+router.post('/pretraga', searchServices);
 
-router.get("/dodavanje", (req, res, next) => {
-    next();
-})
+router.put('/izmena', updateService);
 
-router.get("/izmena/:serviceId", (req, res, next) => {
-    next();
-})
-
-router.post("/dodavanje", (req, res, next) => {
-    next();
-})
-
-router.put("/izmena", (req, res, next) => {
-    next();
-})
-
-router.post("/pretraga", (req, res, next) => {
-    next();
-})
-
-router.delete("/brisanje/:serviceId", (req, res, next) => {
-    next();
-})
+router.delete('/brisanje', deleteService);
 
 export default router;

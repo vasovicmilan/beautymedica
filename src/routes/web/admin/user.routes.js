@@ -1,38 +1,21 @@
 import { Router } from 'express';
+import {
+  listUsers,
+  userDetail,
+  editUserForm,
+  updateUser,
+  searchUsers,
+  deleteUser,
+} from '../../../controllers/web/admin/user.controller.js';
 
 const router = Router();
 
-// All users for admin
-router.get("/", (req, res, next) => {
-    next();
-})
+router.get('/', listUsers);
+router.get('/detalji/:userId', userDetail);
+router.get('/izmena/:userId', editUserForm);
 
-router.get("/detalji/:userId", (req, res, next) => {
-    next();
-})
-
-router.get("/dodavanje", (req, res, next) => {
-    next();
-})
-
-router.get("/izmena/:userId", (req, res, next) => {
-    next();
-})
-
-router.post("/dodavanje", (req, res, next) => {
-    next();
-})
-
-router.put("/izmena", (req, res, next) => {
-    next();
-})
-
-router.post("/pretraga", (req, res, next) => {
-    next();
-})
-
-router.delete("/brisanje/:userId", (req, res, next) => {
-    next();
-})
+router.put('/izmena', updateUser);
+router.post('/pretraga', searchUsers);
+router.delete('/brisanje/:userId', deleteUser);
 
 export default router;

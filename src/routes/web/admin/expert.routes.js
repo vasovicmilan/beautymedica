@@ -1,38 +1,27 @@
 import { Router } from 'express';
+import {
+  listExperts,
+  expertDetail,
+  addExpertForm,
+  editExpertForm,
+  createExpert,
+  updateExpert,
+  searchExperts,
+  deleteExpert,
+} from '../../../controllers/web/admin/expert.controller.js';
 
 const router = Router();
 
-// All experts for admin
-router.get("/", (req, res, next) => {
-    next();
-})
+router.get('/', listExperts);
+router.get('/detalji/:expertId', expertDetail);
+router.get('/dodavanje', addExpertForm);
+router.get('/izmena/:expertId', editExpertForm);
 
-router.get("/detalji/:expertId", (req, res, next) => {
-    next();
-})
+router.post('/dodavanje', createExpert);
+router.post('/pretraga', searchExperts);
 
-router.get("/dodavanje", (req, res, next) => {
-    next();
-})
+router.put('/izmena', updateExpert);
 
-router.get("/izmena/:expertId", (req, res, next) => {
-    next();
-})
-
-router.post("/dodavanje", (req, res, next) => {
-    next();
-})
-
-router.put("/izmena", (req, res, next) => {
-    next();
-})
-
-router.post("/pretraga", (req, res, next) => {
-    next();
-})
-
-router.delete("/brisanje/:expertId", (req, res, next) => {
-    next();
-})
+router.delete('/brisanje', deleteExpert);
 
 export default router;

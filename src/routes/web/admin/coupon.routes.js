@@ -1,38 +1,24 @@
 import { Router } from 'express';
+import {
+  listCoupons,
+  couponDetail,
+  addCouponForm,
+  editCouponForm,
+  createCoupon,
+  updateCoupon,
+  searchCoupons,
+  deleteCoupon,
+} from '../../../controllers/web/admin/coupon.controller.js';
 
 const router = Router();
 
-// All coupons for admin
-router.get("/", (req, res, next) => {
-    next();
-})
-
-router.get("/detalji/:couponId", (req, res, next) => {
-    next();
-})
-
-router.get("/dodavanje", (req, res, next) => {
-    next();
-})
-
-router.get("/izmena/:couponId", (req, res, next) => {
-    next();
-})
-
-router.post("/dodavanje", (req, res, next) => {
-    next();
-})
-
-router.put("/izmena", (req, res, next) => {
-    next();
-})
-
-router.post("/pretraga", (req, res, next) => {
-    next();
-})
-
-router.delete("/brisanje/:couponId", (req, res, next) => {
-    next();
-})
+router.get('/', listCoupons);
+router.get('/detalji/:couponId', couponDetail);
+router.get('/dodavanje', addCouponForm);
+router.get('/izmena/:couponId', editCouponForm);
+router.post('/dodavanje', createCoupon);
+router.put('/izmena', updateCoupon);
+router.post('/pretraga', searchCoupons);
+router.delete('/brisanje', deleteCoupon);
 
 export default router;

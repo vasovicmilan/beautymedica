@@ -1,26 +1,22 @@
 import { Router } from 'express';
+import {
+  listAppointments,
+  appointmentDetail,
+  editAppointmentForm,
+  updateAppointment,
+  searchAppointments,
+} from '../../../controllers/web/admin/appointment.controller.js';
 
 const router = Router();
 
-// All appointments for admin
-router.get("/", (req, res, next) => {
-    next();
-})
+router.get('/', listAppointments);
 
-router.get("/detalji/:appointmentId", (req, res, next) => {
-    next();
-})
+router.get('/detalji/:appointmentId', appointmentDetail);
 
-router.get("/izmena/:appointmentId", (req, res, next) => {
-    next();
-})
+router.get('/izmena/:appointmentId', editAppointmentForm);
 
-router.put("/izmena", (req, res, next) => {
-    next();
-})
+router.put('/izmena', updateAppointment);
 
-router.post("/pretraga", (req, res, next) => {
-    next();
-})
+router.post('/pretraga', searchAppointments);
 
 export default router;

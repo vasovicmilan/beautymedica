@@ -1,38 +1,27 @@
 import { Router } from 'express';
+import {
+  listCategories,
+  categoryDetail,
+  addCategoryForm,
+  editCategoryForm,
+  createCategory,
+  updateCategory,
+  searchCategories,
+  deleteCategory,
+} from '../../../controllers/web/admin/category.controller.js';
 
 const router = Router();
 
-// All categories for admin
-router.get("/", (req, res, next) => {
-    next();
-})
+router.get('/', listCategories);
+router.get('/detalji/:categoryId', categoryDetail);
+router.get('/dodavanje', addCategoryForm);
+router.get('/izmena/:categoryId', editCategoryForm);
 
-router.get("/detalji/:categoryId", (req, res, next) => {
-    next();
-})
+router.post('/dodavanje', createCategory);
+router.post('/pretraga', searchCategories);
 
-router.get("/dodavanje", (req, res, next) => {
-    next();
-})
+router.put('/izmena', updateCategory);
 
-router.get("/izmena/:categoryId", (req, res, next) => {
-    next();
-})
-
-router.post("/dodavanje", (req, res, next) => {
-    next();
-})
-
-router.put("/izmena", (req, res, next) => {
-    next();
-})
-
-router.post("/pretraga", (req, res, next) => {
-    next();
-})
-
-router.delete("/brisanje/:categoryId", (req, res, next) => {
-    next();
-})
+router.delete('/brisanje', deleteCategory);
 
 export default router;

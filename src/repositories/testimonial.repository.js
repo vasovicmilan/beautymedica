@@ -103,3 +103,24 @@ export async function updateTestimonialById(id, data) {
 export async function deleteTestimonialById(id) {
   return Testimonial.findByIdAndDelete(id).lean();
 }
+
+export async function countTestimonialsByParams({
+  search = "",
+  isAdmin = false,
+  rating = null,
+  serviceId = null,
+  employeeId = null,
+  userId = null,
+  approved = null,
+} = {}) {
+  const filter = buildTestimonialFilter({
+    search,
+    isAdmin,
+    rating,
+    serviceId,
+    employeeId,
+    userId,
+    approved,
+  });
+  return Testimonial.countDocuments(filter);
+}

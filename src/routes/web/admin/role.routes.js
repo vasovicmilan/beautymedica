@@ -1,38 +1,27 @@
 import { Router } from 'express';
+import {
+  listRoles,
+  roleDetail,
+  addRoleForm,
+  editRoleForm,
+  createRole,
+  updateRole,
+  searchRoles,
+  deleteRole,
+} from '../../../controllers/web/admin/role.controller.js';
 
 const router = Router();
 
-// All roles for admin
-router.get("/", (req, res, next) => {
-    next();
-})
+router.get('/', listRoles);
+router.get('/detalji/:roleId', roleDetail);
+router.get('/dodavanje', addRoleForm);
+router.get('/izmena/:roleId', editRoleForm);
 
-router.get("/detalji/:roleId", (req, res, next) => {
-    next();
-})
+router.post('/dodavanje', createRole);
+router.post('/pretraga', searchRoles);
 
-router.get("/dodavanje", (req, res, next) => {
-    next();
-})
+router.put('/izmena', updateRole);
 
-router.get("/izmena/:roleId", (req, res, next) => {
-    next();
-})
-
-router.post("/dodavanje", (req, res, next) => {
-    next();
-})
-
-router.put("/izmena", (req, res, next) => {
-    next();
-})
-
-router.post("/pretraga", (req, res, next) => {
-    next();
-})
-
-router.delete("/brisanje/:roleId", (req, res, next) => {
-    next();
-})
+router.delete('/brisanje', deleteRole);
 
 export default router;

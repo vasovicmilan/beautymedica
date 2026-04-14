@@ -1,38 +1,27 @@
 import { Router } from 'express';
+import {
+  listTestimonials,
+  testimonialDetail,
+  addTestimonialForm,
+  editTestimonialForm,
+  createTestimonial,
+  updateTestimonial,
+  searchTestimonials,
+  deleteTestimonial,
+} from '../../../controllers/web/admin/testimonial.controller.js';
 
 const router = Router();
 
-// All testimonials for admin
-router.get("/", (req, res, next) => {
-    next();
-})
+router.get('/', listTestimonials);
+router.get('/detalji/:testimonialId', testimonialDetail);
+router.get('/dodavanje', addTestimonialForm);
+router.get('/izmena/:testimonialId', editTestimonialForm);
 
-router.get("/detalji/:testimonialId", (req, res, next) => {
-    next();
-})
+router.post('/dodavanje', createTestimonial);
+router.post('/pretraga', searchTestimonials);
 
-router.get("/dodavanje", (req, res, next) => {
-    next();
-})
+router.put('/izmena', updateTestimonial);
 
-router.get("/izmena/:testimonialId", (req, res, next) => {
-    next();
-})
-
-router.post("/dodavanje", (req, res, next) => {
-    next();
-})
-
-router.put("/izmena", (req, res, next) => {
-    next();
-})
-
-router.post("/pretraga", (req, res, next) => {
-    next();
-})
-
-router.delete("/brisanje/:testimonialId", (req, res, next) => {
-    next();
-})
+router.delete('/brisanje', deleteTestimonial);
 
 export default router;

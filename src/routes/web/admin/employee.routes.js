@@ -1,38 +1,27 @@
 import { Router } from 'express';
+import {
+  listEmployees,
+  employeeDetail,
+  addEmployeeForm,
+  editEmployeeForm,
+  createEmployee,
+  updateEmployee,
+  searchEmployees,
+  deleteEmployee,
+} from '../../../controllers/web/admin/employee.controller.js';
 
 const router = Router();
 
-// All employee for admin
-router.get("/", (req, res, next) => {
-    next();
-})
+router.get('/', listEmployees);
+router.get('/detalji/:employeeId', employeeDetail);
+router.get('/dodavanje', addEmployeeForm);
+router.get('/izmena/:employeeId', editEmployeeForm);
 
-router.get("/detalji/:employeeId", (req, res, next) => {
-    next();
-})
+router.post('/dodavanje', createEmployee);
+router.post('/pretraga', searchEmployees);
 
-router.get("/dodavanje", (req, res, next) => {
-    next();
-})
+router.put('/izmena', updateEmployee);
 
-router.get("/izmena/:employeeId", (req, res, next) => {
-    next();
-})
-
-router.post("/dodavanje", (req, res, next) => {
-    next();
-})
-
-router.put("/izmena", (req, res, next) => {
-    next();
-})
-
-router.post("/pretraga", (req, res, next) => {
-    next();
-})
-
-router.delete("/brisanje/:employeeId", (req, res, next) => {
-    next();
-})
+router.delete('/brisanje', deleteEmployee);
 
 export default router;

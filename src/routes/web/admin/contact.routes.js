@@ -1,30 +1,20 @@
 import { Router } from 'express';
+import {
+  listContacts,
+  contactDetail,
+  editContactForm,
+  updateContact,
+  searchContacts,
+} from '../../../controllers/web/admin/contact.controller.js';
 
 const router = Router();
 
-// All contacts for admin
-router.get("/", (req, res, next) => {
-    next();
-})
+router.get('/', listContacts);
+router.get('/detalji/:contactId', contactDetail);
+router.get('/izmena/:contactId', editContactForm);
 
-router.get("/detalji/:contactId", (req, res, next) => {
-    next();
-})
+router.put('/izmena', updateContact);
 
-router.get("/dodavanje", (req, res, next) => {
-    next();
-})
-
-router.get("/izmena/:contactId", (req, res, next) => {
-    next();
-})
-
-router.put("/izmena", (req, res, next) => {
-    next();
-})
-
-router.post("/pretraga", (req, res, next) => {
-    next();
-})
+router.post('/pretraga', searchContacts);
 
 export default router;
