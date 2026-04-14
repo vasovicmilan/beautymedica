@@ -18,7 +18,7 @@ import { setupViewEngine } from "./config/view.engine.config.js";
 import logger from "./config/logger.config.js";
 
 import { csrfLocals, csrfWebOnly } from "./config/csrf.config.js";
-import { globalErrorHandler, notFoundHandler } from "./src/utils/error.util.js";
+import { globalErrorHandler, notFoundHandler } from "./utils/error.util.js";
 
 dotenv.config();
 

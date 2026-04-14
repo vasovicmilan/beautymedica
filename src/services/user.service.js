@@ -1,5 +1,4 @@
 import * as userRepository from '../repositories/user.repository.js';
-import * as roleRepository from '../repositories/role.repository.js';
 import {
   mapUserForAdminShort,
   mapUserForAdminDetail,
@@ -21,7 +20,6 @@ function mapUser(user, role, viewType = 'short', isOwnProfile = false) {
   if (role === 'employee') {
     return viewType === 'short' ? mapUserForEmployeeShort(user) : mapUserForEmployeeDetail(user);
   }
-
   return {
     id: user._id.toString(),
     imePrezime: `${user.firstName} ${user.lastName}`,
@@ -53,27 +51,11 @@ export async function findUsers(search = '', limit = 20, page = 1, raw = false) 
       search,
       limit,
       page,
-      isAdmin: true, // admin vidi sve korisnike (i neaktivne)
+      isAdmin: true,
+      populateFields: { path: 'roleId', select: 'name' },
     });
-    // Dodatno populovati roleId za mapiranje
-    // Pošto repository ne vraća populate, moramo naknadno populovati ili proslediti populateFields
-    // Popravka: repository podržava populateFields? U originalu ne, ali možemo proširiti poziv.
-    // Radi jednostavnosti, ovde ćemo naknadno dohvatiti role za svakog? Nije efikasno.
-    // Bolje: pozvati findUsers sa populateFields. Ali izvorni repository nema taj parametar.
-    // Predlažem da se repository proširi, ali za sada ćemo pretpostaviti da roleId nije populovan,
-    // pa će mapiranje prikazati "Nepoznato". U praksi treba dodati populate.
-    // Umesto toga, ovde ručno populiramo roleId za svaki user (dodatni upiti).
-    const usersWithRoles = await Promise.all(
-      result.data.map(async (user) => {
-        if (user.roleId) {
-          const role = await roleRepository.findRoleById(user.roleId);
-          return { ...user, roleId: role };
-        }
-        return user;
-      })
-    );
-    if (raw) return { ...result, data: usersWithRoles };
-    const mappedData = usersWithRoles.map(user => mapUser(user, 'admin', 'short'));
+    if (raw) return result;
+    const mappedData = result.data.map(user => mapUser(user, 'admin', 'short'));
     return {
       data: mappedData,
       total: result.total,
@@ -88,13 +70,8 @@ export async function findUsers(search = '', limit = 20, page = 1, raw = false) 
 
 export async function findUserById(id, raw = false) {
   try {
-    const user = await userRepository.findUserById(id);
+    const user = await userRepository.findUserById(id, { path: 'roleId', select: 'name' });
     if (!user) notFound('Korisnik');
-
-    if (user.roleId) {
-      const role = await roleRepository.findRoleById(user.roleId);
-      user.roleId = role;
-    }
     if (raw) return user;
     return mapUser(user, 'admin', 'detail');
   } catch (error) {
@@ -106,7 +83,6 @@ export async function findUserById(id, raw = false) {
 export async function updateUserById(id, data) {
   try {
     await ensureUserExists(id);
-
     if (data.email) {
       const existing = await userRepository.findUserByEmail(data.email);
       if (existing && existing._id.toString() !== id) {
