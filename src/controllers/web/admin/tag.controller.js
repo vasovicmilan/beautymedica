@@ -1,3 +1,4 @@
+// src/controllers/admin/tag.controller.js
 import * as tagService from '../../../services/tag.service.js';
 import { badRequest } from '../../../utils/error.util.js';
 
@@ -15,6 +16,15 @@ const TAG_TYPES = [
   { value: 'custom', label: 'Prilagođeno' },
 ];
 
+// Helper za SEO na admin stranicama (ne indeksira se)
+function getAdminSeo(title) {
+  return {
+    title: `Admin - ${title}`,
+    robots: 'noindex, follow',
+    description: '',
+  };
+}
+
 export async function listTags(req, res, next) {
   try {
     const { search, limit, page, domain, type } = req.query;
@@ -26,7 +36,8 @@ export async function listTags(req, res, next) {
       domain,
       type,
     });
-    res.render('admin/tags/index', {
+    const seo = getAdminSeo('Tagovi');
+    res.render('admin/taxonomy/tags', {
       tags: result.data,
       total: result.total,
       page: result.page,
@@ -36,6 +47,7 @@ export async function listTags(req, res, next) {
       type,
       tagDomains: TAG_DOMAINS,
       tagTypes: TAG_TYPES,
+      seo,
     });
   } catch (error) {
     next(error);
@@ -46,7 +58,9 @@ export async function tagDetail(req, res, next) {
   try {
     const { tagId } = req.params;
     const tag = await tagService.findTagById(tagId, 'admin');
-    res.render('admin/tags/detail', { tag });
+    if (!tag) return notFound('Tag');
+    const seo = getAdminSeo(`Tag: ${tag.osnovno?.naziv || tag.name}`);
+    res.render('admin/taxonomy/tag-details', { tag, seo });
   } catch (error) {
     next(error);
   }
@@ -54,9 +68,11 @@ export async function tagDetail(req, res, next) {
 
 export async function addTagForm(req, res, next) {
   try {
-    res.render('admin/tags/add', {
+    const seo = getAdminSeo('Dodavanje taga');
+    res.render('admin/taxonomy/new-tag', {
       tagDomains: TAG_DOMAINS,
       tagTypes: TAG_TYPES,
+      seo,
     });
   } catch (error) {
     next(error);
@@ -67,10 +83,12 @@ export async function editTagForm(req, res, next) {
   try {
     const { tagId } = req.params;
     const tag = await tagService.findTagById(tagId, 'admin', true);
-    res.render('admin/tags/edit', {
+    const seo = getAdminSeo(`Izmena taga: ${tag.name}`);
+    res.render('admin/taxonomy/new-tag', {
       tag,
       tagDomains: TAG_DOMAINS,
       tagTypes: TAG_TYPES,
+      seo,
     });
   } catch (error) {
     next(error);
@@ -111,7 +129,7 @@ export async function createTag(req, res, next) {
 
     await tagService.createTag(data);
     req.session.flash = { type: 'success', message: 'Tag je uspešno kreiran' };
-    res.redirect('/admin/tags');
+    res.redirect('/admin/oznake');
   } catch (error) {
     next(error);
   }
@@ -150,7 +168,7 @@ export async function updateTag(req, res, next) {
 
     await tagService.updateTagById(id, data);
     req.session.flash = { type: 'success', message: 'Tag je uspešno ažuriran' };
-    res.redirect(`/admin/tags/detalji/${id}`);
+    res.redirect(`/admin/oznake/detalji/${id}`);
   } catch (error) {
     next(error);
   }
@@ -165,7 +183,7 @@ export async function searchTags(req, res, next) {
     if (type) query.append('type', type);
     if (limit) query.append('limit', limit);
     if (page) query.append('page', page);
-    res.redirect(`/admin/tags?${query.toString()}`);
+    res.redirect(`/admin/oznake?${query.toString()}`);
   } catch (error) {
     next(error);
   }
@@ -173,10 +191,11 @@ export async function searchTags(req, res, next) {
 
 export async function deleteTag(req, res, next) {
   try {
-    const { tagId } = req.body;
+    const { tagId } = req.body; // ID se šalje kroz body (prema tvojim rutama)
+    if (!tagId) badRequest('Nedostaje ID taga');
     await tagService.deleteTagById(tagId);
     req.session.flash = { type: 'success', message: 'Tag je obrisan' };
-    res.redirect('/admin/tags');
+    res.redirect('/admin/oznake');
   } catch (error) {
     next(error);
   }

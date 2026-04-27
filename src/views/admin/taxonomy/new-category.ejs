@@ -1,0 +1,106 @@
+<%
+  const isEdit = typeof tag !== 'undefined' && tag !== null;
+  const formTitle = isEdit ? 'Izmena taga' : 'Dodavanje novog taga';
+  const formAction = isEdit ? '/admin/oznake/izmena' : '/admin/oznake/dodavanje';
+  const submitBtnText = isEdit ? 'Ažuriraj' : 'Dodaj';
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2"><%= formTitle %></h1>
+    <a href="/admin/oznake" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left"></i> Nazad
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <form action="<%= formAction %>" method="POST">
+        <% if (isEdit) { %>
+          <input type="hidden" name="_method" value="PUT">
+          <input type="hidden" name="id" value="<%= tag.id %>">
+        <% } %>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="name" class="form-label">Naziv *</label>
+            <input type="text" class="form-control" id="name" name="name" value="<%= isEdit ? tag.name : '' %>" required>
+          </div>
+          <div class="col-md-6">
+            <label for="slug" class="form-label">Slug *</label>
+            <input type="text" class="form-control" id="slug" name="slug" value="<%= isEdit ? tag.slug : '' %>" required>
+            <small class="text-muted">Jedinstveni URL identifikator (mala slova, bez razmaka).</small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="domain" class="form-label">Domen *</label>
+            <select class="form-select" id="domain" name="domain" required>
+              <% tagDomains.forEach(d => { %>
+                <option value="<%= d.value %>" <%= (isEdit && tag.domain === d.value) ? 'selected' : '' %>><%= d.label %></option>
+              <% }) %>
+            </select>
+            <small class="text-muted">Da li tag pripada uslugama ili blogu.</small>
+          </div>
+          <div class="col-md-6">
+            <label for="type" class="form-label">Tip *</label>
+            <select class="form-select" id="type" name="type" required>
+              <% tagTypes.forEach(t => { %>
+                <option value="<%= t.value %>" <%= (isEdit && tag.type === t.value) ? 'selected' : '' %>><%= t.label %></option>
+              <% }) %>
+            </select>
+            <small class="text-muted">Kategorizacija taga (deo tela, cilj, tehnologija...).</small>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="shortDescription" class="form-label">Kratak opis</label>
+          <textarea class="form-control" id="shortDescription" name="shortDescription" rows="2"><%= isEdit ? (tag.shortDescription || '') : '' %></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="longDescription" class="form-label">Dug opis</label>
+          <textarea class="form-control" id="longDescription" name="longDescription" rows="4"><%= isEdit ? (tag.longDescription || '') : '' %></textarea>
+        </div>
+
+        <hr class="my-4">
+
+        <h5 class="mb-3">SEO podešavanja</h5>
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="isIndexable" name="isIndexable" <%= (isEdit && tag.isIndexable === true) ? 'checked' : '' %>>
+              <label class="form-check-label" for="isIndexable">Dozvoli indeksiranje</label>
+            </div>
+            <small class="text-muted">Ako nije označeno, robots meta će biti "noindex".</small>
+          </div>
+          <div class="col-md-4">
+            <label for="metaPriority" class="form-label">Prioritet (0-100)</label>
+            <input type="number" class="form-control" id="metaPriority" name="metaPriority" min="0" max="100" value="<%= isEdit ? (tag.meta?.priority || 0) : 0 %>">
+          </div>
+          <div class="col-md-4">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="metaIsActive" name="metaIsActive" <%= (isEdit && tag.meta?.isActive === true) ? 'checked' : '' %>>
+              <label class="form-check-label" for="metaIsActive">Aktivan tag</label>
+            </div>
+            <small class="text-muted">Neaktivni tagovi se ne prikazuju na sajtu.</small>
+          </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="d-flex justify-content-end">
+          <a href="/admin/oznake" class="btn btn-secondary me-2">Otkaži</a>
+          <button type="submit" class="btn btn-primary"><%= submitBtnText %></button>
+        </div>
+        <input type="hidden" name="CSRFToken" value="<%= csrfToken %>">
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('../../includes/end') %>

@@ -15,7 +15,12 @@ export async function listCategories(req, res, next) {
       domain,
       parent: parent === 'null' ? null : parent,
     });
-    res.render('admin/categories/index', {
+    const seo = {
+      title: 'Admin panel – Kategorije',
+      robots: 'noindex, follow',
+      description: 'Upravljanje kategorijama usluga i bloga',
+    };
+    res.render('admin/taxonomy/categories', {
       categories: result.data,
       total: result.total,
       page: result.page,
@@ -23,8 +28,10 @@ export async function listCategories(req, res, next) {
       search,
       domain,
       parent,
+      seo
     });
   } catch (error) {
+    console.error(error);
     next(error);
   }
 }
@@ -36,7 +43,11 @@ export async function categoryDetail(req, res, next) {
   try {
     const { categoryId } = req.params;
     const category = await categoryService.findCategoryById(categoryId, 'admin');
-    res.render('admin/categories/detail', { category });
+        const seo = {
+      title: `Admin - Kategorija: ${category.osnovno.naziv}`,
+      robots: 'noindex, follow',
+    };
+    res.render('admin/taxonomy/category-details', { category, seo });
   } catch (error) {
     next(error);
   }
@@ -47,9 +58,13 @@ export async function categoryDetail(req, res, next) {
  */
 export async function addCategoryForm(req, res, next) {
   try {
-    // Dohvati root kategorije za dropdown (parent)
-    const rootCategories = await categoryService.findRootCategories(null, 'admin');
-    res.render('admin/categories/add', { rootCategories });
+    // Dohvati sve roditeljske kategorije (opciono)
+    const parents = await categoryService.findAllCategories({ isAdmin: true, raw: true });
+    const seo = {
+      title: 'Admin - Dodavanje kategorije',
+      robots: 'noindex, follow',
+    };
+    res.render('admin/taxonomy/new-category', { parents, seo });
   } catch (error) {
     next(error);
   }
@@ -61,9 +76,13 @@ export async function addCategoryForm(req, res, next) {
 export async function editCategoryForm(req, res, next) {
   try {
     const { categoryId } = req.params;
-    const category = await categoryService.findCategoryById(categoryId, 'admin', false);
-    const rootCategories = await categoryService.findRootCategories(null, 'admin');
-    res.render('admin/categories/edit', { category, rootCategories });
+    const category = await categoryService.findCategoryById(categoryId, 'admin');
+    const parents = await categoryService.findAllCategories({ isAdmin: true, raw: true });
+    const seo = {
+      title: `Admin - Izmena kategorije: ${category.osnovno.naziv}`,
+      robots: 'noindex, follow',
+    };
+    res.render('admin/taxonomy/new-category', { category, parents, seo });
   } catch (error) {
     next(error);
   }
@@ -92,7 +111,7 @@ export async function createCategory(req, res, next) {
     };
     await categoryService.createCategory(data);
     req.session.flash = { type: 'success', message: 'Kategorija je uspešno kreirana' };
-    res.redirect('/admin/categories');
+    res.redirect('/admin/kategorije');
   } catch (error) {
     next(error);
   }
@@ -121,7 +140,7 @@ export async function updateCategory(req, res, next) {
     };
     await categoryService.updateCategoryById(id, data);
     req.session.flash = { type: 'success', message: 'Kategorija je uspešno ažurirana' };
-    res.redirect(`/admin/categories/detalji/${id}`);
+    res.redirect(`/admin/kategorije/detalji/${id}`);
   } catch (error) {
     next(error);
   }
@@ -139,7 +158,7 @@ export async function searchCategories(req, res, next) {
     if (parent) query.append('parent', parent);
     if (limit) query.append('limit', limit);
     if (page) query.append('page', page);
-    res.redirect(`/admin/categories?${query.toString()}`);
+    res.redirect(`/admin/kategorije?${query.toString()}`);
   } catch (error) {
     next(error);
   }
@@ -153,7 +172,7 @@ export async function deleteCategory(req, res, next) {
     const { categoryId } = req.body;
     await categoryService.deleteCategoryById(categoryId);
     req.session.flash = { type: 'success', message: 'Kategorija je obrisana' };
-    res.redirect('/admin/categories');
+    res.redirect('/admin/kategorije');
   } catch (error) {
     next(error);
   }

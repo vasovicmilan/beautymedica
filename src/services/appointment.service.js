@@ -1,8 +1,8 @@
 import * as appointmentRepository from '../repositories/appointment.repository.js';
 import { mapAppointment } from '../mappers/appointment.mapper.js';
 import { badRequest, notFound, forbidden, internalError } from '../utils/error.util.js';
-import logger from '../utils/logger.config.js';
-import eventEmitter from '../events/eventEmitter.js';
+import logger from '../config/logger.config.js';
+import eventEmitter from '../events/event.emitter.js';
 
 function canAccessAppointment(appointment, userId, role) {
   if (role === 'admin') return true;

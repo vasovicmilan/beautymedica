@@ -1,0 +1,12 @@
+<section id="experts" class="py-5">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-5">Naš stručni tim</h2>
+    <div class="row g-4">
+      <% experts.forEach(expert => { %>
+        <div class="col-md-3 col-sm-6">
+          <%- include('../../includes/components/card-expert', { expert }) %>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</section>

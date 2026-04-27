@@ -1,0 +1,77 @@
+<%
+  // Ako columns nije prosleđen, generiši ga iz prvog item-a
+  let columns = locals.columns;
+  const items = locals.items || [];
+  const actions = locals.actions || [];
+  const hasActions = locals.hasActions !== undefined ? locals.hasActions : actions.length > 0;
+  const tableClass = locals.tableClass || 'table table-striped table-hover';
+
+  if (!columns && items.length > 0) {
+    const firstItem = items[0];
+    columns = Object.keys(firstItem).map(key => ({
+      key: key,
+      label: key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1') // "naziv" -> "Naziv", "kreirana" -> "Kreirana"
+    }));
+  }
+
+  function formatValue(value, type) {
+    if (value === undefined || value === null) return '—';
+    if (type === 'date' && value) {
+      if (typeof value === 'string') return new Date(value).toLocaleDateString('sr-RS');
+      if (value instanceof Date) return value.toLocaleDateString('sr-RS');
+      return value;
+    }
+    return value;
+  }
+%>
+
+<div class="table-responsive">
+  <table class="<%= tableClass %>">
+    <thead class="table-light">
+      <tr>
+        <% columns.forEach(col => { %>
+          <th scope="col"><%= col.label %></th>
+        <% }) %>
+        <% if (hasActions) { %>
+          <th scope="col">Akcije</th>
+        <% } %>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (items.length) { %>
+        <% items.forEach(item => { %>
+          <tr>
+            <% columns.forEach(col => { %>
+              <td><%= formatValue(item[col.key], col.type) %></td>
+            <% }) %>
+            <% if (hasActions) { %>
+              <td class="text-nowrap">
+                <% actions.forEach(action => { %>
+                  <% if (action.type === 'link') { %>
+                    <a href="<%= action.url %><%= item.id %>" class="btn btn-sm btn-<%= action.color || 'outline-info' %> me-1" aria-label="<%= action.ariaLabel %>">
+                      <i class="bi <%= action.icon %>"></i>
+                    </a>
+                  <% } else if (action.type === 'form') { %>
+                    <form action="<%= action.formAction %>" method="POST" class="d-inline" <%= action.confirm ? `onsubmit="return confirm('${action.confirm}');"` : '' %>>
+                      <input type="hidden" name="_method" value="DELETE">
+                      <input type="hidden" name="id" value="<%= item.id %>">
+                      <button type="submit" class="btn btn-sm btn-<%= action.color || 'outline-danger' %>" aria-label="<%= action.ariaLabel %>">
+                        <i class="bi <%= action.icon %>"></i>
+                      </button>
+                    </form>
+                  <% } %>
+                <% }) %>
+              </td>
+            <% } %>
+          </tr>
+        <% }) %>
+      <% } else { %>
+        <tr>
+          <td colspan="<%= columns.length + (hasActions ? 1 : 0) %>" class="text-center text-muted py-4">
+            Nema podataka za prikaz.
+          </td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>

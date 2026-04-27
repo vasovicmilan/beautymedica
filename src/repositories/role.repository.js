@@ -33,6 +33,11 @@ export async function findRoleById(id) {
              .lean();
 }
 
+// ✅ Added this function
+export async function findRoleByName(name) {
+  return Role.findOne({ name }).lean();
+}
+
 export async function createRole(data) {
   const role = new Role(data);
   return role.save();

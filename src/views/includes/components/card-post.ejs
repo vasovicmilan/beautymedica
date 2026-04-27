@@ -1,0 +1,16 @@
+<%
+  const post = locals.post;
+  if (!post) return;
+%>
+<div class="card shadow-sm p-3 h-100">
+  <div class="blog-horizontal">
+    <div class="blog-img">
+      <img src="<%= post.slika?.url || '/images/default-post.jpg' %>" class="img-fluid rounded-4" alt="<%= post.naslov %>">
+    </div>
+    <div class="blog-content">
+      <h5 class="card-title"><%= post.naslov %></h5>
+      <p class="card-text"><%= post.kratakOpis %></p>
+      <a href="/blog/<%= post.slug %>" class="btn btn-outline-secondary rounded-pill btn-sm">Pročitaj više <i class="bi bi-arrow-right"></i></a>
+    </div>
+  </div>
+</div>

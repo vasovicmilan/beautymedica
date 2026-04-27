@@ -1,0 +1,85 @@
+<%
+  const isEdit = typeof coupon !== 'undefined' && coupon !== null;
+  const formTitle = isEdit ? 'Izmena kupona' : 'Dodavanje novog kupona';
+  const formAction = isEdit ? '/admin/kuponi/izmena' : '/admin/kuponi/dodavanje';
+  const submitBtnText = isEdit ? 'Ažuriraj' : 'Dodaj';
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2"><%= formTitle %></h1>
+    <a href="/admin/kuponi" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left"></i> Nazad
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <form action="<%= formAction %>" method="POST">
+        <% if (isEdit) { %>
+          <input type="hidden" name="_method" value="PUT">
+          <input type="hidden" name="id" value="<%= coupon._id %>">
+        <% } %>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="code" class="form-label">Kod *</label>
+            <input type="text" class="form-control" id="code" name="code" value="<%= isEdit ? coupon.code : '' %>" required>
+            <small class="text-muted">Biće konvertovan u velika slova.</small>
+          </div>
+          <div class="col-md-6">
+            <label for="type" class="form-label">Tip *</label>
+            <select class="form-select" id="type" name="type" required>
+              <option value="welcome" <%= isEdit && coupon.type === 'welcome' ? 'selected' : '' %>>Dobrodošlica</option>
+              <option value="promo" <%= isEdit && coupon.type === 'promo' ? 'selected' : '' %>>Promo</option>
+              <option value="limited" <%= isEdit && coupon.type === 'limited' ? 'selected' : '' %>>Ograničeni</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label for="discount" class="form-label">Popust (%) *</label>
+            <input type="number" class="form-control" id="discount" name="discount" min="1" max="100" value="<%= isEdit ? coupon.discount : '' %>" required>
+          </div>
+          <div class="col-md-4">
+            <label for="maxUses" class="form-label">Max upotreba (prazno = neograničeno)</label>
+            <input type="number" class="form-control" id="maxUses" name="maxUses" value="<%= isEdit ? (coupon.maxUses !== null ? coupon.maxUses : '') : '' %>">
+          </div>
+          <div class="col-md-4">
+            <label for="perUserLimit" class="form-label">Po korisniku</label>
+            <input type="number" class="form-control" id="perUserLimit" name="perUserLimit" value="<%= isEdit ? coupon.perUserLimit : 1 %>">
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="startDate" class="form-label">Početak važenja</label>
+            <input type="datetime-local" class="form-control" id="startDate" name="startDate" value="<%= isEdit && coupon.startDate ? new Date(coupon.startDate).toISOString().slice(0,16) : '' %>">
+          </div>
+          <div class="col-md-6">
+            <label for="endDate" class="form-label">Kraj važenja</label>
+            <input type="datetime-local" class="form-control" id="endDate" name="endDate" value="<%= isEdit && coupon.endDate ? new Date(coupon.endDate).toISOString().slice(0,16) : '' %>">
+          </div>
+        </div>
+
+        <div class="mb-3 form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="isActive" name="isActive" <%= (isEdit ? coupon.isActive : true) ? 'checked' : '' %>>
+          <label class="form-check-label" for="isActive">Aktivan kupon</label>
+        </div>
+
+        <hr class="my-4">
+        <div class="d-flex justify-content-end">
+          <a href="/admin/kuponi" class="btn btn-secondary me-2">Otkaži</a>
+          <button type="submit" class="btn btn-primary"><%= submitBtnText %></button>
+        </div>
+        <input type="hidden" name="CSRFToken" value="<%= csrfToken %>">
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('../../includes/end') %>

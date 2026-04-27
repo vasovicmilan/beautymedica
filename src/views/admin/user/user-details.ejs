@@ -1,0 +1,84 @@
+<%
+  if (!user) return;
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2">Detalji korisnika</h1>
+    <div>
+      <a href="/admin/korisnici" class="btn btn-outline-secondary me-2">
+        <i class="bi bi-arrow-left"></i> Nazad
+      </a>
+      <a href="/admin/korisnici/izmena/<%= user.id %>" class="btn btn-primary">
+        <i class="bi bi-pencil"></i> Izmeni
+      </a>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Osnovne informacije -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Osnovne informacije</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4">ID</dt>
+            <dd class="col-sm-8"><%= user.id %></dd>
+
+            <dt class="col-sm-4">Ime i prezime</dt>
+            <dd class="col-sm-8"><%= user.imePrezime %></dd>
+
+            <dt class="col-sm-4">Email</dt>
+            <dd class="col-sm-8"><%= user.email %></dd>
+
+            <dt class="col-sm-4">Telefon</dt>
+            <dd class="col-sm-8"><%= user.telefon || '—' %></dd>
+
+            <dt class="col-sm-4">Google ID</dt>
+            <dd class="col-sm-8"><%= user.googleId %></dd>
+
+            <dt class="col-sm-4">Uloga</dt>
+            <dd class="col-sm-8"><%= user.uloga %></dd>
+
+            <dt class="col-sm-4">Aktivan</dt>
+            <dd class="col-sm-8"><%= user.aktivan %></dd>
+
+            <dt class="col-sm-4">Prihvaćeni uslovi</dt>
+            <dd class="col-sm-8"><%= user.prihvaceniUslovi %></dd>
+
+            <dt class="col-sm-4">Avatar</dt>
+            <dd class="col-sm-8"><%= user.avatar ? user.avatar : '—' %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vreme -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Vreme</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-6">Poslednji login</dt>
+            <dd class="col-sm-6"><%= user.poslednjiLogin || 'Nikada' %></dd>
+
+            <dt class="col-sm-6">Registrovan</dt>
+            <dd class="col-sm-6"><%= user.vreme.registrovan %></dd>
+
+            <dt class="col-sm-6">Ažuriran</dt>
+            <dd class="col-sm-6"><%= user.vreme.azuriran %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../includes/end') %>

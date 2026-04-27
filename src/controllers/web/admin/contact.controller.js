@@ -1,6 +1,15 @@
 import * as contactService from '../../../services/contact.service.js';
 import { badRequest } from '../../../utils/error.util.js';
 
+// Helper za SEO na admin stranicama
+function getAdminSeo(title) {
+  return {
+    title: `Admin - ${title}`,
+    robots: 'noindex, follow',
+    description: '',
+  };
+}
+
 export async function listContacts(req, res, next) {
   try {
     const { search, limit, page, status, type } = req.query;
@@ -12,7 +21,8 @@ export async function listContacts(req, res, next) {
       status,
       type,
     });
-    res.render('admin/contacts/index', {
+    const seo = getAdminSeo('Kontakt poruke');
+    res.render('admin/contact/contacts', {
       contacts: result.data,
       total: result.total,
       page: result.page,
@@ -20,6 +30,7 @@ export async function listContacts(req, res, next) {
       search,
       status,
       type,
+      seo,
     });
   } catch (error) {
     next(error);
@@ -30,17 +41,8 @@ export async function contactDetail(req, res, next) {
   try {
     const { contactId } = req.params;
     const contact = await contactService.findContactById(contactId, 'admin');
-    res.render('admin/contacts/detail', { contact });
-  } catch (error) {
-    next(error);
-  }
-}
-
-export async function editContactForm(req, res, next) {
-  try {
-    const { contactId } = req.params;
-    const contact = await contactService.findContactById(contactId, 'admin', null, true); // raw podaci (bez mape)
-    res.render('admin/contacts/edit', { contact });
+    const seo = getAdminSeo(`Kontakt poruka: ${contact.naslov}`);
+    res.render('admin/contact/contact-details', { contact, seo });
   } catch (error) {
     next(error);
   }
@@ -58,7 +60,7 @@ export async function updateContact(req, res, next) {
     }
     await contactService.updateContactById(id, data);
     req.session.flash = { type: 'success', message: 'Kontakt poruka je ažurirana' };
-    res.redirect(`/admin/contacts/detalji/${id}`);
+    res.redirect(`/admin/kontakti/detalji/${id}`);
   } catch (error) {
     next(error);
   }
@@ -73,7 +75,7 @@ export async function searchContacts(req, res, next) {
     if (type) query.append('type', type);
     if (limit) query.append('limit', limit);
     if (page) query.append('page', page);
-    res.redirect(`/admin/contacts?${query.toString()}`);
+    res.redirect(`/admin/kontakti?${query.toString()}`);
   } catch (error) {
     next(error);
   }

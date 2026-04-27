@@ -1,0 +1,74 @@
+<!-- ========== KONTAKT I MAPA (NOVA VERZIJA) ========== -->
+<section id="contact" class="py-5 bg-primary-custom text-white">
+  <div class="container">
+    <div class="row g-5">
+      <!-- Leva kolona: Bootstrap forma -->
+      <div class="col-lg-6">
+        <h2 class="fw-bold mb-4">Kontaktirajte nas</h2>
+        <p class="mb-4">Pošaljite nam poruku, odgovaramo u roku od 24 sata.</p>
+
+        <form action="#" method="post">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="firstName" class="form-label">Ime</label>
+              <input type="text" class="form-control" id="firstName" required>
+            </div>
+            <div class="col-md-6">
+              <label for="lastName" class="form-label">Prezime</label>
+              <input type="text" class="form-control" id="lastName" required>
+            </div>
+            <div class="col-12">
+              <label for="email" class="form-label">Email adresa</label>
+              <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="col-12">
+              <label for="phone" class="form-label">Broj telefona</label>
+              <input type="tel" class="form-control" id="phone">
+            </div>
+            <div class="col-12">
+              <label for="topic" class="form-label">Tema</label>
+              <select class="form-select" id="topic">
+                <option selected>Izaberite...</option>
+                <option>ESMA tretmani</option>
+                <option>Masaže</option>
+                <option>Zakazivanje termina</option>
+                <option>Cene i paketi</option>
+                <option>Ostalo</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label for="message" class="form-label">Poruka</label>
+              <textarea class="form-control" id="message" rows="4" required></textarea>
+            </div>
+            <div class="col-12">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="consent" required>
+                <label class="form-check-label" for="consent">
+                  Slažem se sa obradom ličnih podataka u svrhu odgovora na moj upit.
+                </label>
+              </div>
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-light-custom btn-lg px-5">Pošalji poruku</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Desna kolona: Mapa (OpenStreetMap) -->
+      <div class="col-lg-6">
+        <h2 class="fw-bold mb-4">Pronađite nas</h2>
+        <p class="mb-3">Bulevar oslobođenja 45, Beograd</p>
+        <div class="ratio ratio-16x9 rounded-4 overflow-hidden shadow">
+          <iframe 
+            src="https://www.openstreetmap.org/export/embed.html?bbox=20.456%2C44.797%2C20.468%2C44.804&layer=mapnik&marker=44.8005%2C20.462" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy">
+          </iframe>
+        </div>
+        <p class="mt-3 small">Radno vreme: pon–sub 09–20h</p>
+      </div>
+    </div>
+  </div>
+</section>

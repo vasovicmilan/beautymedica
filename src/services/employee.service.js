@@ -4,7 +4,7 @@ import {
   mapEmployee,
 } from '../mappers/employee.mapper.js';
 import { notFound, badRequest, forbidden, internalError } from '../utils/error.util.js';
-import logger from '../utils/logger.config.js';
+import logger from '../config/logger.config.js';
 
 function mapEmployeeData(employee, role, viewType = 'short') {
   if (!employee) return null;
@@ -103,12 +103,11 @@ export async function findEmployees({ limit = 20, page = 1, role = 'admin', raw 
 
 export async function findEmployeeById(id, role = 'admin', raw = false) {
   try {
-    const employee = await employeeRepository.findEmployeeById(id, {
-      path: [
+    const employee = await employeeRepository.findEmployeeById(id, 
+      [
         { path: 'userId', select: 'firstName lastName email phone' },
         { path: 'services', select: 'name' },
-      ],
-    });
+      ]);
     if (!employee) notFound('Zaposleni');
     if (raw) return employee;
     const viewType = role === 'admin' ? 'detail' : (role === 'employee' ? 'detail' : 'short');
@@ -128,8 +127,10 @@ export async function updateEmployeeById(id, data, userId, role) {
         forbidden('Nemate pravo da menjate podatke drugog zaposlenog');
       }
     }
-    if (data.workingHours) {
-      validateWorkingHours(data.workingHours);
+
+    if (data.userId && data.userId !== employee.userId?.toString()) {
+      const existing = await employeeRepository.findEmployeeByUserId(data.userId);
+      if (existing) badRequest('Korisnik je već zaposlen');
     }
     const updated = await employeeRepository.updateEmployeeById(id, data);
     logger.info({ employeeId: id, updatedBy: userId, role, fields: Object.keys(data) }, 'Employee updated');

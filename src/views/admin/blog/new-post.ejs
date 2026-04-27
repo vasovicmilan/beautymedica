@@ -1,0 +1,152 @@
+<%
+  const formTitle = isEdit ? 'Izmena posta' : 'Dodavanje novog posta';
+  const formAction = isEdit ? '/admin/objave/izmena' : '/admin/objave/dodavanje';
+  const submitBtnText = isEdit ? 'Ažuriraj' : 'Dodaj';
+
+  // Sigurno čitanje vrednosti za edit mod
+  const postTitle = isEdit && post ? post.title : '';
+  const postShortDesc = isEdit && post ? post.shortDescription : '';
+  const postDesc = isEdit && post ? post.description : '';
+  const postStatus = isEdit && post ? post.status : '';
+  const postExpertId = isEdit && post && post.expert ? (post.expert._id?.toString() || post.expert.toString()) : '';
+  const postIsIndexable = isEdit && post ? (post.indeksiranje === 'Dozvoljeno' || post.isIndexable === true) : true;
+  const postSeoKeywords = isEdit && post && Array.isArray(post.seoKljucneReci) ? post.seoKljucneReci.join(', ') : '';
+  const postContent = isEdit && post && post.sadrzaj ? JSON.stringify(post.sadrzaj, null, 2) : '';
+  const postFaq = isEdit && post && post.faq ? JSON.stringify(post.faq, null, 2) : '';
+  const hasImage = isEdit && post && post.image && post.image.url;
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2"><%= formTitle %></h1>
+    <a href="/admin/objave" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left"></i> Nazad
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <form action="<%= formAction %>" method="POST" enctype="multipart/form-data">
+        <% if (isEdit && post) { %>
+          <input type="hidden" name="_method" value="PUT">
+          <input type="hidden" name="id" value="<%= post._id %>">
+        <% } %>
+
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <label for="title" class="form-label">Naslov *</label>
+            <input type="text" class="form-control" id="title" name="title" value="<%= postTitle %>" required>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label for="status" class="form-label">Status</label>
+            <select class="form-select" id="status" name="status">
+              <option value="draft" <%= postStatus === 'Nacrt' ? 'selected' : '' %>>Nacrt</option>
+              <option value="published" <%= postStatus === 'Objavljeno' ? 'selected' : '' %>>Objavljeno</option>
+              <option value="featured" <%= postStatus === 'Istaknuto' ? 'selected' : '' %>>Istaknuto</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="expert" class="form-label">Autor (ekspert) *</label>
+            <select class="form-select" id="expert" name="expert" required>
+              <option value="">Izaberite...</option>
+              <% experts.forEach(exp => { %>
+                <option value="<%= exp._id %>" <%= postExpertId === exp._id.toString() ? 'selected' : '' %>>
+                  <%= exp.firstName %> <%= exp.lastName %>
+                </option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <div class="form-check form-switch mt-4">
+              <input class="form-check-input" type="checkbox" id="isIndexable" name="isIndexable" <%= postIsIndexable ? 'checked' : '' %>>
+              <label for="isIndexable">Dozvoli indeksiranje</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="shortDescription" class="form-label">Kratak opis *</label>
+          <textarea class="form-control" id="shortDescription" name="shortDescription" rows="2" required><%= postShortDesc %></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">Meta opis (description) *</label>
+          <textarea class="form-control" id="description" name="description" rows="2" required><%= postDesc %></textarea>
+        </div>
+
+        <hr class="my-4">
+        <h5>Slika posta</h5>
+        <% if (hasImage) { %>
+          <div class="mb-3">
+            <img src="<%= post.image.url %>" alt="<%= post.image.alt || post.title %>" style="max-height: 100px;" class="img-thumbnail">
+            <div class="form-check mt-2">
+              <input class="form-check-input" type="checkbox" id="removeImage" name="removeImage" value="1">
+              <label class="form-check-label" for="removeImage">Obriši postojeću sliku</label>
+            </div>
+          </div>
+        <% } %>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="imageFile" class="form-label">Izaberite sliku (JPEG, PNG, WebP)</label>
+            <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/jpeg,image/png,image/webp">
+          </div>
+          <div class="col-md-6">
+            <label for="imageAlt" class="form-label">Alt tekst slike</label>
+            <input type="text" class="form-control" id="imageAlt" name="imageAlt" value="<%= isEdit && post && post.image ? post.image.alt : '' %>">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="seoKeywords" class="form-label">SEO ključne reči (odvojene zarezom)</label>
+          <input type="text" class="form-control" id="seoKeywords" name="seoKeywords" value="<%= postSeoKeywords %>">
+        </div>
+
+        <div class="mb-3">
+          <label for="content" class="form-label">Sadržaj (JSON)</label>
+          <textarea class="form-control" id="content" name="content" rows="10"><%= postContent %></textarea>
+          <small class="text-muted">Format: [{ "type": "paragraph", "data": "..." }, ...]</small>
+        </div>
+
+        <div class="mb-3">
+          <label for="faq" class="form-label">FAQ (JSON)</label>
+          <textarea class="form-control" id="faq" name="faq" rows="5"><%= postFaq %></textarea>
+          <small class="text-muted">Format: [{ "question": "...", "answer": "..." }]</small>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="categories" class="form-label">Kategorije</label>
+            <select multiple class="form-select" id="categories" name="categories" size="5">
+              <% categories.forEach(cat => { %>
+                <option value="<%= cat._id %>" <%= (postCategoryIds && postCategoryIds.includes(cat._id.toString())) ? 'selected' : '' %>><%= cat.name %></option>
+              <% }) %>
+            </select>
+            <small>Držite Ctrl za višestruki odabir.</small>
+          </div>
+          <div class="col-md-6">
+            <label for="tags" class="form-label">Tagovi</label>
+            <select multiple class="form-select" id="tags" name="tags" size="5">
+              <% tags.forEach(tag => { %>
+                <option value="<%= tag._id %>" <%= (postTagIds && postTagIds.includes(tag._id.toString())) ? 'selected' : '' %>><%= tag.name %></option>
+              <% }) %>
+            </select>
+          </div>
+        </div>
+
+        <hr>
+        <div class="d-flex justify-content-end">
+          <a href="/admin/objave" class="btn btn-secondary me-2">Otkaži</a>
+          <button type="submit" class="btn btn-primary"><%= submitBtnText %></button>
+        </div>
+        <input type="hidden" name="CSRFToken" value="<%= csrfToken %>">
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('../../includes/end') %>

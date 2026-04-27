@@ -1,0 +1,9 @@
+<%
+  const expert = locals.expert;
+  if (!expert) return;
+%>
+<div class="card p-3 h-100">
+  <img src="<%= expert.slika?.url || '/images/default-avatar.jpg' %>" class="rounded-circle mx-auto mb-3" width="130" height="130" style="object-fit: cover;">
+  <h5><%= expert.imePrezime %></h5>
+  <span class="badge bg-light text-dark rounded-pill mt-2"><%= expert.titula %></span>
+</div>

@@ -2,6 +2,15 @@ import * as userService from '../../../services/user.service.js';
 import * as roleService from '../../../services/role.service.js';
 import { badRequest } from '../../../utils/error.util.js';
 
+// Helper za SEO na admin stranicama (ne indeksira se)
+function getAdminSeo(title) {
+  return {
+    title: `Admin - ${title}`,
+    robots: 'noindex, follow',
+    description: '',
+  };
+}
+
 export async function listUsers(req, res, next) {
   try {
     const { search, limit, page } = req.query;
@@ -10,12 +19,14 @@ export async function listUsers(req, res, next) {
       limit ? parseInt(limit) : 20,
       page ? parseInt(page) : 1
     );
-    res.render('admin/users/index', {
+    const seo = getAdminSeo('Korisnici');
+    res.render('admin/user/users', {
       users: result.data,
       total: result.total,
       page: result.page,
       limit: result.limit,
       search,
+      seo,
     });
   } catch (error) {
     next(error);
@@ -26,7 +37,8 @@ export async function userDetail(req, res, next) {
   try {
     const { userId } = req.params;
     const user = await userService.findUserById(userId);
-    res.render('admin/users/detail', { user });
+    const seo = getAdminSeo(`Korisnik: ${user.imePrezime}`);
+    res.render('admin/user/user-details', { user, seo });
   } catch (error) {
     next(error);
   }
@@ -35,9 +47,10 @@ export async function userDetail(req, res, next) {
 export async function editUserForm(req, res, next) {
   try {
     const { userId } = req.params;
-    const user = await userService.findUserById(userId, true);
+    const user = await userService.findUserById(userId, true); // raw
     const roles = await roleService.findAllRoles({ raw: true });
-    res.render('admin/users/edit', { user, roles });
+    const seo = getAdminSeo(`Izmena korisnika: ${user.firstName} ${user.lastName}`);
+    res.render('admin/user/edit-user', { user, roles, seo });
   } catch (error) {
     next(error);
   }
@@ -61,7 +74,7 @@ export async function updateUser(req, res, next) {
 
     await userService.updateUserById(id, data);
     req.session.flash = { type: 'success', message: 'Korisnik je uspešno ažuriran' };
-    res.redirect(`/admin/users/detalji/${id}`);
+    res.redirect(`/admin/korisnici/detalji/${id}`);
   } catch (error) {
     next(error);
   }
@@ -74,7 +87,7 @@ export async function searchUsers(req, res, next) {
     if (search) query.append('search', search);
     if (limit) query.append('limit', limit);
     if (page) query.append('page', page);
-    res.redirect(`/admin/users?${query.toString()}`);
+    res.redirect(`/admin/korisnici?${query.toString()}`);
   } catch (error) {
     next(error);
   }
@@ -85,7 +98,7 @@ export async function deleteUser(req, res, next) {
     const { userId } = req.body;
     await userService.deleteUserById(userId);
     req.session.flash = { type: 'success', message: 'Korisnik je obrisan' };
-    res.redirect('/admin/users');
+    res.redirect('/admin/korisnici');
   } catch (error) {
     next(error);
   }

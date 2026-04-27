@@ -1,0 +1,135 @@
+<%
+  if (!contact) return;
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2">Detalji kontakt poruke</h1>
+    <div>
+      <a href="/admin/contacts" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Nazad
+      </a>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Osnovne informacije (prikaz) -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Osnovne informacije</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4">ID</dt>
+            <dd class="col-sm-8"><%= contact.id %></dd>
+
+            <dt class="col-sm-4">Ime pošiljaoca</dt>
+            <dd class="col-sm-8"><%= contact.pošiljalac.ime %></dd>
+
+            <dt class="col-sm-4">Email</dt>
+            <dd class="col-sm-8"><%= contact.pošiljalac.email %></dd>
+
+            <dt class="col-sm-4">Telefon</dt>
+            <dd class="col-sm-8"><%= contact.pošiljalac.telefon || '—' %></dd>
+
+            <dt class="col-sm-4">Tip</dt>
+            <dd class="col-sm-8"><%= contact.tip %></dd>
+
+            <dt class="col-sm-4">Naslov</dt>
+            <dd class="col-sm-8"><%= contact.naslov %></dd>
+
+            <dt class="col-sm-4">Prihvaćena privatnost</dt>
+            <dd class="col-sm-8"><%= contact.prihvacenoPrivatnost %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vreme -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Vreme</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-6">Poslato</dt>
+            <dd class="col-sm-6"><%= contact.vreme.poslato %></dd>
+            <dt class="col-sm-6">Poslednje ažuriranje</dt>
+            <dd class="col-sm-6"><%= contact.vreme.poslednjeAzuriranje %></dd>
+            <dt class="col-sm-6">Odgovoreno</dt>
+            <dd class="col-sm-6"><%= contact.odgovoreno || '—' %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Poruka -->
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Poruka</h5>
+        </div>
+        <div class="card-body">
+          <p class="mb-0"><%= contact.poruka %></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trenutna interna napomena (samo prikaz) -->
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Interna napomena (trenutna)</h5>
+        </div>
+        <div class="card-body">
+          <p class="mb-0"><%= contact.internNapomena || '—' %></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Forma za ažuriranje statusa i napomene -->
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Ažuriraj status i internu napomenu</h5>
+        </div>
+        <div class="card-body">
+          <form action="/admin/contacts/izmena" method="POST">
+            <input type="hidden" name="_method" value="PUT">
+            <input type="hidden" name="id" value="<%= contact.id %>">
+            <input type="hidden" name="CSRFToken" value="<%= csrfToken %>">
+
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <label for="status" class="form-label">Status</label>
+                <select class="form-select" id="status" name="status">
+                  <option value="new" <%= contact.status === 'Nova' ? 'selected' : '' %>>Nova</option>
+                  <option value="in-progress" <%= contact.status === 'U obradi' ? 'selected' : '' %>>U obradi</option>
+                  <option value="resolved" <%= contact.status === 'Rešeno' ? 'selected' : '' %>>Rešeno</option>
+                </select>
+                <small class="text-muted">Označavanje kao "Rešeno" postavlja datum odgovora.</small>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="note" class="form-label">Interna napomena</label>
+              <textarea class="form-control" id="note" name="note" rows="3"><%= contact.internNapomena !== '—' ? contact.internNapomena : '' %></textarea>
+              <small class="text-muted">Ova napomena nije vidljiva korisniku.</small>
+            </div>
+
+            <div class="d-flex justify-content-end">
+              <button type="submit" class="btn btn-primary">Sačuvaj izmene</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../includes/end') %>

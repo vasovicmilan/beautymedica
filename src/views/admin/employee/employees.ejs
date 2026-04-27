@@ -1,0 +1,72 @@
+<%
+  const currentUrl = '/admin/zaposleni';
+  const queryParams = {};
+  const totalPages = Math.ceil(total / limit);
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2">Zaposleni</h1>
+    <a href="/admin/zaposleni/dodavanje" class="btn btn-primary">
+      <i class="bi bi-plus-circle"></i> Novi zaposleni
+    </a>
+  </div>
+
+  <!-- Search form -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <form action="/admin/zaposleni/pretraga" method="POST" class="row g-3">
+        <div class="col-md-8">
+          <label for="limit" class="form-label">Prikaz po stranici</label>
+          <select class="form-select" id="limit" name="limit">
+            <option value="10">10</option>
+            <option value="20" selected>20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary w-100">Primeni</button>
+        </div>
+        <input type="hidden" name="CSRFToken" value="<%= csrfToken %>">
+      </form>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="card">
+    <div class="card-body p-0">
+      <%- include('../../includes/components/table', {
+        columns: [
+          { key: 'id', label: 'ID' },
+          { key: 'imePrezime', label: 'Ime i prezime' },
+          { key: 'email', label: 'Email' },
+          { key: 'aktivan', label: 'Aktivan' },
+          { key: 'brojUsluga', label: 'Broj usluga' },
+          { key: 'kreiran', label: 'Kreiran' }
+        ],
+        items: employees,
+        actions: [
+          { type: 'link', url: '/admin/zaposleni/detalji/', icon: 'bi-eye', color: 'outline-info', ariaLabel: 'Detalji' },
+          { type: 'link', url: '/admin/zaposleni/izmena/', icon: 'bi-pencil', color: 'outline-secondary', ariaLabel: 'Izmena' },
+          { type: 'form', formAction: '/admin/zaposleni/brisanje', icon: 'bi-trash', color: 'outline-danger', ariaLabel: 'Brisanje', confirm: 'Da li ste sigurni da želite da obrišete ovog zaposlenog?' }
+        ]
+      }) %>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <% if (totalPages > 1) { %>
+    <%- include('../../includes/components/pagination', {
+      currentPage: page,
+      totalPages: totalPages,
+      baseUrl: currentUrl,
+      queryParams: queryParams
+    }) %>
+  <% } %>
+</div>
+
+<%- include('../../includes/end') %>

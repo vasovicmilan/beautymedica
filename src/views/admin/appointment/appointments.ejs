@@ -1,0 +1,79 @@
+<%
+  const currentUrl = '/admin/termini';
+  const queryParams = { search, status, startTimeFrom, startTimeTo };
+  const totalPages = Math.ceil(total / limit);
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2">Termini</h1>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <form action="/admin/termini/pretraga" method="POST" class="row g-3">
+        <div class="col-md-3">
+          <label for="search" class="form-label">Pretraga</label>
+          <input type="text" class="form-control" id="search" name="search" value="<%= search || '' %>" placeholder="Korisnik, usluga...">
+        </div>
+        <div class="col-md-2">
+          <label for="status" class="form-label">Status</label>
+          <select class="form-select" id="status" name="status">
+            <option value="">Svi</option>
+            <option value="pending" <%= status === 'pending' ? 'selected' : '' %>>Na čekanju</option>
+            <option value="confirmed" <%= status === 'confirmed' ? 'selected' : '' %>>Potvrđeno</option>
+            <option value="rejected" <%= status === 'rejected' ? 'selected' : '' %>>Odbijeno</option>
+            <option value="cancelled" <%= status === 'cancelled' ? 'selected' : '' %>>Otkazano</option>
+            <option value="completed" <%= status === 'completed' ? 'selected' : '' %>>Završeno</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label for="startTimeFrom" class="form-label">Od datuma</label>
+          <input type="datetime-local" class="form-control" id="startTimeFrom" name="startTimeFrom" value="<%= startTimeFrom || '' %>">
+        </div>
+        <div class="col-md-2">
+          <label for="startTimeTo" class="form-label">Do datuma</label>
+          <input type="datetime-local" class="form-control" id="startTimeTo" name="startTimeTo" value="<%= startTimeTo || '' %>">
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary w-100">Pretraži</button>
+        </div>
+        <input type="hidden" name="CSRFToken" value="<%= csrfToken %>">
+      </form>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body p-0">
+      <%- include('../../includes/components/table', {
+        columns: [
+          { key: 'id', label: 'ID' },
+          { key: 'korisnik', label: 'Korisnik' },
+          { key: 'usluga', label: 'Usluga' },
+          { key: 'datum', label: 'Datum' },
+          { key: 'status', label: 'Status' },
+          { key: 'ukupnaCena', label: 'Cena' }
+        ],
+        items: appointments,
+        actions: [
+          { type: 'link', url: '/admin/termini/detalji/', icon: 'bi-eye', color: 'outline-info', ariaLabel: 'Detalji' },
+          { type: 'link', url: '/admin/termini/izmena/', icon: 'bi-pencil', color: 'outline-secondary', ariaLabel: 'Izmena' }
+        ]
+      }) %>
+    </div>
+  </div>
+
+  <% if (totalPages > 1) { %>
+    <%- include('../../includes/components/pagination', {
+      currentPage: page,
+      totalPages: totalPages,
+      baseUrl: currentUrl,
+      queryParams: queryParams
+    }) %>
+  <% } %>
+</div>
+
+<%- include('../../includes/end') %>

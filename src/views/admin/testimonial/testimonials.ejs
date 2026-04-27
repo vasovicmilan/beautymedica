@@ -1,0 +1,93 @@
+<%
+  const currentUrl = '/admin/utisci';
+  const queryParams = { search, rating, serviceId, employeeId, userId, approved };
+  const totalPages = Math.ceil(total / limit);
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2">Utisci klijenata</h1>
+  </div>
+
+  <!-- Search/filter form -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <form action="/admin/utisci/pretraga" method="POST" class="row g-3">
+        <div class="col-md-2">
+          <label for="search" class="form-label">Pretraga</label>
+          <input type="text" class="form-control" id="search" name="search" value="<%= search || '' %>" placeholder="Ime, email...">
+        </div>
+        <div class="col-md-2">
+          <label for="rating" class="form-label">Ocena</label>
+          <select class="form-select" id="rating" name="rating">
+            <option value="">Sve</option>
+            <option value="1" <%= rating == 1 ? 'selected' : '' %>>1 ★</option>
+            <option value="2" <%= rating == 2 ? 'selected' : '' %>>2 ★</option>
+            <option value="3" <%= rating == 3 ? 'selected' : '' %>>3 ★</option>
+            <option value="4" <%= rating == 4 ? 'selected' : '' %>>4 ★</option>
+            <option value="5" <%= rating == 5 ? 'selected' : '' %>>5 ★</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label for="approved" class="form-label">Odobren</label>
+          <select class="form-select" id="approved" name="approved">
+            <option value="">Svi</option>
+            <option value="true" <%= approved === 'true' ? 'selected' : '' %>>Odobren</option>
+            <option value="false" <%= approved === 'false' ? 'selected' : '' %>>Neodobren</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label for="limit" class="form-label">Prikaz po stranici</label>
+          <select class="form-select" id="limit" name="limit">
+            <option value="10">10</option>
+            <option value="20" selected>20</option>
+            <option value="50">50</option>
+          </select>
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary w-100">Pretraži</button>
+        </div>
+        <input type="hidden" name="CSRFToken" value="<%= csrfToken %>">
+      </form>
+    </div>
+  </div>
+
+  <!-- Tabela -->
+  <div class="card">
+    <div class="card-body p-0">
+      <%- include('../../includes/components/table', {
+        columns: [
+          { key: 'id', label: 'ID' },
+          { key: 'ime', label: 'Ime' },
+          { key: 'email', label: 'Email' },
+          { key: 'ocena', label: 'Ocena' },
+          { key: 'komentar', label: 'Komentar' },
+          { key: 'usluga', label: 'Usluga' },
+          { key: 'terapeut', label: 'Terapeut' },
+          { key: 'odobren', label: 'Odobren' },
+          { key: 'datum', label: 'Datum' }
+        ],
+        items: testimonials,
+        actions: [
+          { type: 'link', url: '/admin/utisci/detalji/', icon: 'bi-eye', color: 'outline-info', ariaLabel: 'Detalji' },
+          { type: 'form', formAction: '/admin/utisci/brisanje', icon: 'bi-trash', color: 'outline-danger', ariaLabel: 'Brisanje', confirm: 'Da li ste sigurni da želite da obrišete ovaj utisak?' }
+        ]
+      }) %>
+    </div>
+  </div>
+
+  <!-- Paginacija -->
+  <% if (totalPages > 1) { %>
+    <%- include('../../includes/components/pagination', {
+      currentPage: page,
+      totalPages: totalPages,
+      baseUrl: currentUrl,
+      queryParams: queryParams
+    }) %>
+  <% } %>
+</div>
+
+<%- include('../../includes/end') %>

@@ -1,0 +1,78 @@
+<%
+  const isEdit = typeof role !== 'undefined' && role !== null;
+  const formTitle = isEdit ? 'Izmena uloge' : 'Dodavanje nove uloge';
+  const formAction = isEdit ? '/admin/uloge/izmena' : '/admin/uloge/dodavanje';
+  const submitBtnText = isEdit ? 'Ažuriraj' : 'Dodaj';
+
+  // Sistemske dozvole (ista lista kao u modelu)
+  const allPermissions = [
+    { value: 'manage_users', label: 'Upravljanje korisnicima' },
+    { value: 'manage_roles', label: 'Upravljanje ulogama' },
+    { value: 'manage_services', label: 'Upravljanje uslugama' },
+    { value: 'manage_all_reservations', label: 'Upravljanje svim rezervacijama' },
+    { value: 'manage_free_reservation', label: 'Upravljanje slobodnim rezervacijama' },
+    { value: 'manage_own_reservations', label: 'Upravljanje sopstvenim rezervacijama' },
+    { value: 'view_dashboard', label: 'Pregled dashboard-a' },
+    { value: 'manage_packages', label: 'Upravljanje paketima' }
+  ];
+
+  function hasPermission(perm) {
+    if (!isEdit) return false;
+    return role.permissions && role.permissions.includes(perm);
+  }
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2"><%= formTitle %></h1>
+    <a href="/admin/uloge" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left"></i> Nazad
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <form action="<%= formAction %>" method="POST">
+        <% if (isEdit) { %>
+          <input type="hidden" name="_method" value="PUT">
+          <input type="hidden" name="id" value="<%= role.id %>">
+        <% } %>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="name" class="form-label">Naziv uloge *</label>
+            <input type="text" class="form-control" id="name" name="name" value="<%= isEdit ? role.name : '' %>" required>
+            <small class="text-muted">Sistemski naziv (admin, employee, user).</small>
+          </div>
+        </div>
+
+        <hr class="my-4">
+        <h5 class="mb-3">Dozvole</h5>
+        <div class="row">
+          <% allPermissions.forEach(perm => { %>
+            <div class="col-md-6 col-lg-4 mb-2">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="permissions" value="<%= perm.value %>" id="perm_<%= perm.value %>" <%= hasPermission(perm.value) ? 'checked' : '' %>>
+                <label class="form-check-label" for="perm_<%= perm.value %>">
+                  <%= perm.label %>
+                </label>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+
+        <hr class="my-4">
+        <div class="d-flex justify-content-end">
+          <a href="/admin/uloge" class="btn btn-secondary me-2">Otkaži</a>
+          <button type="submit" class="btn btn-primary"><%= submitBtnText %></button>
+        </div>
+        <input type="hidden" name="CSRFToken" value="<%= csrfToken %>">
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('../../includes/end') %>

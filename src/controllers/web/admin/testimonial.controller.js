@@ -4,6 +4,15 @@ import * as employeeService from '../../../services/employee.service.js';
 import * as userService from '../../../services/user.service.js';
 import { badRequest } from '../../../utils/error.util.js';
 
+// Helper za SEO na admin stranicama
+function getAdminSeo(title) {
+  return {
+    title: `Admin - ${title}`,
+    robots: 'noindex, follow',
+    description: '',
+  };
+}
+
 export async function listTestimonials(req, res, next) {
   try {
     const { search, limit, page, rating, serviceId, employeeId, userId, approved } = req.query;
@@ -18,7 +27,8 @@ export async function listTestimonials(req, res, next) {
       userId,
       approved: approved === 'true' ? true : (approved === 'false' ? false : null),
     });
-    res.render('admin/testimonials/index', {
+    const seo = getAdminSeo('Utisci');
+    res.render('admin/testimonial/testimonials', {
       testimonials: result.data,
       total: result.total,
       page: result.page,
@@ -29,6 +39,7 @@ export async function listTestimonials(req, res, next) {
       employeeId,
       userId,
       approved,
+      seo,
     });
   } catch (error) {
     next(error);
@@ -39,67 +50,19 @@ export async function testimonialDetail(req, res, next) {
   try {
     const { testimonialId } = req.params;
     const testimonial = await testimonialService.findTestimonialById(testimonialId, 'admin');
-    res.render('admin/testimonials/detail', { testimonial });
-  } catch (error) {
-    next(error);
-  }
-}
-
-export async function addTestimonialForm(req, res, next) {
-  try {
+    // Dohvati dodatne podatke za dropdown (usluge, zaposleni, korisnici)
     const services = await serviceService.findAllServices({ isAdmin: true, raw: true });
     const employeesResult = await employeeService.findEmployees({ role: 'admin', raw: true });
     const employees = employeesResult.data || [];
     const users = await userService.findAllUsers({ raw: true });
-    res.render('admin/testimonials/add', { services, employees, users });
-  } catch (error) {
-    next(error);
-  }
-}
-
-export async function editTestimonialForm(req, res, next) {
-  try {
-    const { testimonialId } = req.params;
-    const testimonial = await testimonialService.findTestimonialById(testimonialId, 'admin', true); // raw
-    const services = await serviceService.findAllServices({ isAdmin: true, raw: true });
-    const employeesResult = await employeeService.findEmployees({ role: 'admin', raw: true });
-    const employees = employeesResult.data || [];
-    const users = await userService.findAllUsers({ raw: true });
-    res.render('admin/testimonials/edit', { testimonial, services, employees, users });
-  } catch (error) {
-    next(error);
-  }
-}
-
-export async function createTestimonial(req, res, next) {
-  try {
-    const {
-      user,
-      displayName,
-      rating,
-      comment,
-      service,
-      employee,
-      approved,
-    } = req.body;
-
-    if (!rating || !comment) {
-      badRequest('Ocena i komentar su obavezni');
-    }
-
-    const data = {
-      user: user || null,
-      displayName: displayName?.trim() || 'Anonymous',
-      rating: parseInt(rating),
-      comment: comment.trim(),
-      service: service || null,
-      employee: employee || null,
-      approved: approved === 'on' || approved === true,
-    };
-
-    await testimonialService.createNewTestimonial(data);
-    req.session.flash = { type: 'success', message: 'Utisak je uspešno kreiran' };
-    res.redirect('/admin/testimonials');
+    const seo = getAdminSeo(`Utisak: ${testimonial.autor.ime}`);
+    res.render('admin/testimonial/testimonial-details', {
+      testimonial,
+      services,
+      employees,
+      users,
+      seo,
+    });
   } catch (error) {
     next(error);
   }
@@ -107,34 +70,14 @@ export async function createTestimonial(req, res, next) {
 
 export async function updateTestimonial(req, res, next) {
   try {
-    const {
-      id,
-      user,
-      displayName,
-      rating,
-      comment,
-      service,
-      employee,
-      approved,
-    } = req.body;
-
+    const { id, approved } = req.body;
     if (!id) badRequest('Nedostaje ID utiska');
-
-    const data = {
-      user: user || null,
-      displayName: displayName?.trim() || 'Anonymous',
-      rating: rating ? parseInt(rating) : undefined,
-      comment: comment?.trim(),
-      service: service || null,
-      employee: employee || null,
-      approved: approved === 'on' || approved === true,
-    };
-
-    Object.keys(data).forEach(key => data[key] === undefined && delete data[key]);
-
+    const isApproved = approved === 'true' || approved === true || approved === 'on';
+    const data = { approved: isApproved };
+    
     await testimonialService.updateTestimonialById(id, data);
-    req.session.flash = { type: 'success', message: 'Utisak je uspešno ažuriran' };
-    res.redirect(`/admin/testimonials/detalji/${id}`);
+    req.session.flash = { type: 'success', message: `Utisak je ${isApproved ? 'odobren' : 'odbijen'}.` };
+    res.redirect(`/admin/utisci/detalji/${id}`);
   } catch (error) {
     next(error);
   }
@@ -152,7 +95,7 @@ export async function searchTestimonials(req, res, next) {
     if (approved !== undefined && approved !== '') query.append('approved', approved);
     if (limit) query.append('limit', limit);
     if (page) query.append('page', page);
-    res.redirect(`/admin/testimonials?${query.toString()}`);
+    res.redirect(`/admin/utisci?${query.toString()}`);
   } catch (error) {
     next(error);
   }
@@ -164,7 +107,7 @@ export async function deleteTestimonial(req, res, next) {
     if (!id) badRequest('Nedostaje ID utiska');
     await testimonialService.deleteTestimonialById(id);
     req.session.flash = { type: 'success', message: 'Utisak je obrisan' };
-    res.redirect('/admin/testimonials');
+    res.redirect('/admin/utisci');
   } catch (error) {
     next(error);
   }

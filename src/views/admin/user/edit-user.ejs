@@ -1,0 +1,82 @@
+<%
+  const isEdit = true; // uvek je izmena (nema dodavanja)
+  const formTitle = 'Izmena korisnika';
+  const formAction = '/admin/korisnici/izmena';
+  const submitBtnText = 'Ažuriraj';
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2"><%= formTitle %></h1>
+    <a href="/admin/korisnici" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left"></i> Nazad
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <form action="<%= formAction %>" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="_method" value="PUT">
+        <input type="hidden" name="id" value="<%= user._id %>">
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="firstName" class="form-label">Ime *</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" value="<%= user.firstName %>" required>
+          </div>
+          <div class="col-md-6">
+            <label for="lastName" class="form-label">Prezime *</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" value="<%= user.lastName %>" required>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="email" class="form-label">Email *</label>
+            <input type="email" class="form-control" id="email" name="email" value="<%= user.email %>" required>
+          </div>
+          <div class="col-md-6">
+            <label for="phone" class="form-label">Telefon</label>
+            <input type="tel" class="form-control" id="phone" name="phone" value="<%= user.phone || '' %>">
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="roleId" class="form-label">Uloga *</label>
+            <select class="form-select" id="roleId" name="roleId" required>
+              <% roles.forEach(role => { %>
+                <option value="<%= role._id %>" <%= (user.roleId.toString() === role._id.toString()) ? 'selected' : '' %>><%= role.name %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <div class="form-check form-switch mt-4">
+              <input class="form-check-input" type="checkbox" id="isActive" name="isActive" <%= user.isActive ? 'checked' : '' %>>
+              <label class="form-check-label" for="isActive">Aktivan korisnik</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="acceptedTerms" name="acceptedTerms" <%= user.acceptedTerms ? 'checked' : '' %>>
+            <label class="form-check-label" for="acceptedTerms">Prihvaćeni uslovi korišćenja</label>
+          </div>
+        </div>
+
+        <hr class="my-4">
+        <div class="d-flex justify-content-end">
+          <a href="/admin/korisnici" class="btn btn-secondary me-2">Otkaži</a>
+          <button type="submit" class="btn btn-primary"><%= submitBtnText %></button>
+        </div>
+        <input type="hidden" name="CSRFToken" value="<%= csrfToken %>">
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('../../includes/end') %>

@@ -1,5 +1,14 @@
+// src/controllers/web/admin/expert.controller.js
 import * as expertService from '../../../services/expert.service.js';
 import { badRequest } from '../../../utils/error.util.js';
+
+function getAdminSeo(title) {
+  return {
+    title: `Admin - ${title}`,
+    robots: 'noindex, follow',
+    description: '',
+  };
+}
 
 export async function listExperts(req, res, next) {
   try {
@@ -10,12 +19,14 @@ export async function listExperts(req, res, next) {
       page: page ? parseInt(page) : 1,
       role: 'admin',
     });
-    res.render('admin/experts/index', {
+    const seo = getAdminSeo('Stručnjaci');
+    res.render('admin/expert/experts', {
       experts: result.data,
       total: result.total,
       page: result.page,
       limit: result.limit,
       search,
+      seo,
     });
   } catch (error) {
     next(error);
@@ -26,7 +37,8 @@ export async function expertDetail(req, res, next) {
   try {
     const { expertId } = req.params;
     const expert = await expertService.findExpertById(expertId, 'admin');
-    res.render('admin/experts/detail', { expert });
+    const seo = getAdminSeo(`Stručnjak: ${expert.imePrezime}`);
+    res.render('admin/expert/expert-details', { expert, seo });
   } catch (error) {
     next(error);
   }
@@ -34,7 +46,8 @@ export async function expertDetail(req, res, next) {
 
 export async function addExpertForm(req, res, next) {
   try {
-    res.render('admin/experts/add');
+    const seo = getAdminSeo('Dodavanje stručnjaka');
+    res.render('admin/expert/new-expert', { seo });
   } catch (error) {
     next(error);
   }
@@ -43,8 +56,9 @@ export async function addExpertForm(req, res, next) {
 export async function editExpertForm(req, res, next) {
   try {
     const { expertId } = req.params;
-    const expert = await expertService.findExpertById(expertId, 'admin', true); // raw podaci
-    res.render('admin/experts/edit', { expert });
+    const expert = await expertService.findExpertById(expertId, 'admin', true);
+    const seo = getAdminSeo(`Izmena stručnjaka: ${expert.firstName} ${expert.lastName}`);
+    res.render('admin/expert/new-expert', { expert, seo });
   } catch (error) {
     next(error);
   }
@@ -74,15 +88,15 @@ export async function createExpert(req, res, next) {
       slug: slug.toLowerCase().trim(),
       bio: bio || null,
       image: imageUrl ? {
-        url: imageUrl.trim(),
-        alt: imageAlt?.trim() || `${firstName} ${lastName}`,
+        img: imageUrl.trim(),
+        imgDesc: imageAlt?.trim() || `${firstName} ${lastName}`,
       } : null,
       isActive: isActive === 'on' || isActive === true,
     };
 
     await expertService.createExpert(data);
     req.session.flash = { type: 'success', message: 'Stručnjak je uspešno kreiran' };
-    res.redirect('/admin/experts');
+    res.redirect('/admin/eksperti');
   } catch (error) {
     next(error);
   }
@@ -111,15 +125,15 @@ export async function updateExpert(req, res, next) {
       slug: slug.toLowerCase().trim(),
       bio: bio || null,
       image: imageUrl ? {
-        url: imageUrl.trim(),
-        alt: imageAlt?.trim() || `${firstName} ${lastName}`,
+        img: imageUrl.trim(),
+        imgDesc: imageAlt?.trim() || `${firstName} ${lastName}`,
       } : null,
       isActive: isActive === 'on' || isActive === true,
     };
 
     await expertService.updateExpertById(id, data);
     req.session.flash = { type: 'success', message: 'Stručnjak je uspešno ažuriran' };
-    res.redirect(`/admin/experts/detalji/${id}`);
+    res.redirect(`/admin/eksperti/detalji/${id}`);
   } catch (error) {
     next(error);
   }
@@ -132,7 +146,7 @@ export async function searchExperts(req, res, next) {
     if (search) query.append('search', search);
     if (limit) query.append('limit', limit);
     if (page) query.append('page', page);
-    res.redirect(`/admin/experts?${query.toString()}`);
+    res.redirect(`/admin/eksperti?${query.toString()}`);
   } catch (error) {
     next(error);
   }
@@ -141,9 +155,10 @@ export async function searchExperts(req, res, next) {
 export async function deleteExpert(req, res, next) {
   try {
     const { expertId } = req.body;
+    if (!expertId) badRequest('Nedostaje ID stručnjaka');
     await expertService.deleteExpertById(expertId);
     req.session.flash = { type: 'success', message: 'Stručnjak je obrisan' };
-    res.redirect('/admin/experts');
+    res.redirect('/admin/eksperti');
   } catch (error) {
     next(error);
   }

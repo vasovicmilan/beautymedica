@@ -1,0 +1,12 @@
+<section id="blog" class="py-5">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-5">Wellness blog</h2>
+    <div class="row g-4 blog-grid">
+      <% blogPosts.forEach(post => { %>
+        <div class="col-md-4">
+          <%- include('../../includes/components/card-post', { post }) %>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</section>

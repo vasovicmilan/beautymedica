@@ -1,0 +1,31 @@
+<%- include('../includes/head', { seo }) %>
+
+<%- include('../includes/components/navigation') %>
+<%- include('./builds/hero_v1') %>
+
+<% if (esmaService) { %>
+  <%- include('./builds/service-section', { 
+    service: esmaService, 
+    id: 'esma', 
+    badgeText: 'Ruski profesionalni aparat',
+    imageSide: 'left'
+  }) %>
+<% } %>
+
+<%- include('./builds/testimonials-section', { testimonials, testimonialStats }) %>
+
+<% if (massageService) { %>
+  <%- include('./builds/service-section', { 
+    service: massageService, 
+    id: 'massage', 
+    badgeText: 'Terapijske i relaks masaže',
+    imageSide: 'right'
+  }) %>
+<% } %>
+
+<%- include('./builds/experts-section', { experts }) %>
+<%- include('../includes/components/faq') %>
+<%- include('./builds/blog-section', { blogPosts }) %>
+<%- include('../includes/components/contact-form') %>
+<%- include('../includes/components/footer') %>
+<%- include('../includes/end') %>

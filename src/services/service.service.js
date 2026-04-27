@@ -6,7 +6,7 @@ import {
   mapServiceForPublicDetail,
 } from '../mappers/service.mapper.js';
 import { notFound, badRequest, internalError } from '../utils/error.util.js';
-import logger from '../utils/logger.config.js';
+import logger from '../config/logger.config.js';
 import { generateSeo } from '../seo/index.seo.js';
 
 const SITE_CONFIG = {
@@ -36,11 +36,17 @@ export async function findFeaturedServices(limit = 6, raw = false) {
       limit,
       page: 1,
       isAdmin: false,
+      populateFields: raw ? [
+        { path: 'categories', select: 'name' },
+        { path: 'tags', select: 'name' },
+        { path: 'employees', populate: { path: 'userId', select: 'firstName lastName' } },
+      ] : null,
     });
     const featured = result.data.filter(s => s.highlight === true);
     if (raw) return featured;
     return featured.map(service => mapService(service, 'public', 'short'));
   } catch (error) {
+    console.error(error);
     logger.error({ error, limit }, 'findFeaturedServices failed');
     throw internalError('Neuspešno dohvatanje istaknutih usluga');
   }
@@ -81,15 +87,32 @@ export async function findServices({
   }
 }
 
-export async function findServiceById(id, isAdmin = false, raw = false) {
+export async function findAllServices({ raw = false } = {}) {
   try {
-    const service = await serviceRepository.findServiceById(id, {
-      path: [
-        { path: 'categories', select: 'name slug' },
-        { path: 'tags', select: 'name slug' },
-        { path: 'employees', populate: { path: 'userId', select: 'firstName lastName' } },
+    const result = await serviceRepository.findServices({
+      limit: 1000,
+      page: 1,
+      isAdmin: false,
+      populateFields: [
+        { path: 'categories', select: 'name' },
+        { path: 'tags', select: 'name' },
       ],
     });
+    if (raw) return result.data;
+    return result.data.map(service => mapService(service, 'public', 'short'));
+  } catch (error) {
+    logger.error({ error }, 'findAllServices failed');
+    throw internalError('Neuspešno dohvatanje usluga');
+  }
+}
+
+export async function findServiceById(id, isAdmin = false, raw = false) {
+  try {
+    const service = await serviceRepository.findServiceById(id, [
+      { path: 'categories', select: 'name slug' },
+      { path: 'tags', select: 'name slug' },
+      { path: 'employees', populate: { path: 'userId', select: 'firstName lastName' } },
+    ]);
     if (!service) notFound('Usluga');
     if (!isAdmin && !service.isActive) notFound('Usluga');
     if (raw) return service;

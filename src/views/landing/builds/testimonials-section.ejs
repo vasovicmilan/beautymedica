@@ -1,0 +1,17 @@
+<section class="py-5 text-center bg-dark-custom">
+  <div class="container">
+    <h2 class="text-white mb-5">Iskustva klijenata</h2>
+    <div class="row g-4">
+      <% testimonials.forEach(t => { %>
+        <div class="col-md-4">
+          <%- include('../../includes/components/card-testimonial', { testimonial: t }) %>
+        </div>
+      <% }) %>
+    </div>
+    <% if (testimonialStats && testimonialStats.total > 0) { %>
+      <div class="mt-5 pt-3 text-white">
+        <p class="fs-5">Prosečna ocena: <%= testimonialStats.averageRating %> ★ (od <%= testimonialStats.total %> utisaka)</p>
+      </div>
+    <% } %>
+  </div>
+</section>

@@ -107,7 +107,6 @@ const PostSchema = new Schema(
 /**
  * INDEXI
  */
-PostSchema.index({ status: 1 });
 PostSchema.index({ categories: 1 });
 PostSchema.index({ tags: 1 });
 PostSchema.index({ createdAt: -1 });

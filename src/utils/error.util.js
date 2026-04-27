@@ -48,5 +48,5 @@ export const globalErrorHandler = (err, req, res, next) => {
   if (process.env.NODE_ENV === "development") console.error(err.stack);
 
   const context = buildErrorContext(err, req);
-  res.status(context.statusCode).render("error", context);
+  res.status(context.statusCode).render("error/error", context);
 };

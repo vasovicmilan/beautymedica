@@ -1,0 +1,331 @@
+<%
+  if (!service) return;
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2">Detalji usluge</h1>
+    <div>
+      <a href="/admin/usluge" class="btn btn-outline-secondary me-2">
+        <i class="bi bi-arrow-left"></i> Nazad
+      </a>
+      <a href="/admin/usluge/izmena/<%= service.id %>" class="btn btn-primary">
+        <i class="bi bi-pencil"></i> Izmeni
+      </a>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Osnovne informacije -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Osnovne informacije</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4">ID</dt>
+            <dd class="col-sm-8"><%= service.id %></dd>
+
+            <dt class="col-sm-4">Naziv</dt>
+            <dd class="col-sm-8"><%= service.naziv %></dd>
+
+            <dt class="col-sm-4">Slug</dt>
+            <dd class="col-sm-8"><%= service.slug %></dd>
+
+            <dt class="col-sm-4">Tip</dt>
+            <dd class="col-sm-8"><%= service.tip %></dd>
+
+            <dt class="col-sm-4">Istaknuto</dt>
+            <dd class="col-sm-8"><%= service.istaknuto %></dd>
+
+            <dt class="col-sm-4">Aktivno</dt>
+            <dd class="col-sm-8"><%= service.aktivan %></dd>
+
+            <dt class="col-sm-4">CTA tekst</dt>
+            <dd class="col-sm-8"><%= service.ctaTekst %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Opisi -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Opisi</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4">Kratak opis</dt>
+            <dd class="col-sm-8"><%= service.kratakOpis || '—' %></dd>
+
+            <dt class="col-sm-4">Dug opis</dt>
+            <dd class="col-sm-8"><%= service.dugOpis || '—' %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slika -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Glavna slika</h5>
+        </div>
+        <div class="card-body text-center">
+          <% if (service.slika && service.slika.url) { %>
+            <img src="<%= service.slika.url %>" alt="<%= service.slika.alt || service.naziv %>" class="img-fluid rounded" style="max-height: 200px;">
+            <p class="mt-2 text-muted"><%= service.slika.alt || 'Nema opisa slike' %></p>
+          <% } else { %>
+            <p class="text-muted">Nema slike</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Galerija -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Galerija</h5>
+        </div>
+        <div class="card-body">
+          <% if (service.galerija && service.galerija.length) { %>
+            <div class="row g-2">
+              <% service.galerija.forEach(img => { %>
+                <div class="col-4">
+                  <img src="<%= img.url %>" alt="<%= img.alt %>" class="img-fluid rounded" style="max-height: 100px;">
+                </div>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <p class="text-muted">Nema galerije</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kategorije i tagovi -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Kategorije i tagovi</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4">Kategorije</dt>
+            <dd class="col-sm-8"><%= service.kategorije.length ? service.kategorije.join(', ') : '—' %></dd>
+
+            <dt class="col-sm-4">Tagovi</dt>
+            <dd class="col-sm-8"><%= service.tagovi.length ? service.tagovi.join(', ') : '—' %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">SEO</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4">SEO ključne reči</dt>
+            <dd class="col-sm-8"><%= service.seoKljucneReci.length ? service.seoKljucneReci.join(', ') : '—' %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Karakteristike (features) -->
+    <div class="col-12">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Karakteristike</h5>
+        </div>
+        <div class="card-body">
+          <% if (service.karakteristike && service.karakteristike.length) { %>
+            <div class="table-responsive">
+              <table class="table table-sm table-bordered">
+                <thead>
+                  <tr>
+                    <th>Naziv</th>
+                    <th>Slug</th>
+                    <th>Opis</th>
+                    <th>Ikona</th>
+                    <th>Redosled</th>
+                    <th>Aktivno</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% service.karakteristike.forEach(f => { %>
+                    <tr>
+                      <td><%= f.naziv %></td>
+                      <td><%= f.slug %></td>
+                      <td><%= f.opis %></td>
+                      <td><%= f.ikona %></td>
+                      <td><%= f.redosled %></td>
+                      <td><%= f.aktivno ? 'Da' : 'Ne' %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          <% } else { %>
+            <p class="text-muted">Nema karakteristika</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paketi -->
+    <div class="col-12">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Paketi</h5>
+        </div>
+        <div class="card-body">
+          <% if (service.paketi && service.paketi.length) { %>
+            <div class="table-responsive">
+              <table class="table table-sm table-bordered">
+                <thead>
+                  <tr>
+                    <th>Naziv</th>
+                    <th>Slug</th>
+                    <th>Tretmana</th>
+                    <th>Ukupna cena</th>
+                    <th>Osnovna cena</th>
+                    <th>Ušteda</th>
+                    <th>Značka</th>
+                    <th>Najbolji</th>
+                    <th>Redosled</th>
+                    <th>Aktivan</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% service.paketi.forEach(p => { %>
+                    <tr>
+                      <td><%= p.naziv %></td>
+                      <td><%= p.slug %></td>
+                      <td><%= p.tretmana %></td>
+                      <td><%= p.ukupnaCena %></td>
+                      <td><%= p.osnovnaCena || '—' %></td>
+                      <td><%= p.usteda || '—' %></td>
+                      <td><%= p.znacka || '—' %></td>
+                      <td><%= p.najbolji ? 'Da' : 'Ne' %></td>
+                      <td><%= p.redosled %></td>
+                      <td><%= p.aktivan ? 'Da' : 'Ne' %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          <% } else { %>
+            <p class="text-muted">Nema paketa</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabela poređenja -->
+    <% if (service.kolonePoredjenja && service.kolonePoredjenja.length && service.tabelaPoredjenja && service.tabelaPoredjenja.redovi) { %>
+      <div class="col-12">
+        <div class="card h-100">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">Tabela poređenja</h5>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-sm table-bordered">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <% service.kolonePoredjenja.forEach(col => { %>
+                      <th><%= col %></th>
+                    <% }) %>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% service.tabelaPoredjenja.redovi.forEach(row => { %>
+                    <tr>
+                      <td><%= row.label %></td>
+                      <% row.vrednosti.forEach(val => { %>
+                        <td><%= val %></td>
+                      <% }) %>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- FAQ -->
+    <% if (service.faq && service.faq.length) { %>
+      <div class="col-12">
+        <div class="card h-100">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">FAQ</h5>
+          </div>
+          <div class="card-body">
+            <div class="accordion" id="faqAccordion">
+              <% service.faq.forEach((item, idx) => { %>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button <%= idx > 0 ? 'collapsed' : '' %>" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse<%= idx %>">
+                      <%= item.pitanje %>
+                    </button>
+                  </h2>
+                  <div id="faqCollapse<%= idx %>" class="accordion-collapse collapse <%= idx === 0 ? 'show' : '' %>" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                      <%= item.odgovor %>
+                    </div>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- Zaposleni -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Zaposleni</h5>
+        </div>
+        <div class="card-body">
+          <p><%= service.zaposleni.length ? service.zaposleni.join(', ') : '—' %></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vreme -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Vreme</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-6">Kreirano</dt>
+            <dd class="col-sm-6"><%= service.vreme.kreiran %></dd>
+
+            <dt class="col-sm-6">Ažurirano</dt>
+            <dd class="col-sm-6"><%= service.vreme.azuriran %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../includes/end') %>

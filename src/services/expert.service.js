@@ -5,7 +5,7 @@ import {
   mapExpertForPublic,
 } from '../mappers/expert.mapper.js';
 import { notFound, badRequest, internalError } from '../utils/error.util.js';
-import logger from '../utils/logger.config.js';
+import logger from '../config/logger.config.js';
 import { buildExpertSeo } from '../seo/builders/expert.builder.js';
 
 const SITE_CONFIG = {

@@ -5,7 +5,7 @@ import {
   mapTagForPublic,
 } from '../mappers/tag.mapper.js';
 import { notFound, badRequest, internalError } from '../utils/error.util.js';
-import logger from '../utils/logger.config.js';
+import logger from '../config/logger.config.js';
 import { buildTagSeo } from '../seo/builders/tag.builder.js';
 
 const SITE_CONFIG = {

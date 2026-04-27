@@ -1,0 +1,83 @@
+<%
+  if (!role) return;
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2">Detalji uloge</h1>
+    <div>
+      <a href="/admin/uloge" class="btn btn-outline-secondary me-2">
+        <i class="bi bi-arrow-left"></i> Nazad
+      </a>
+      <a href="/admin/uloge/izmena/<%= role.id %>" class="btn btn-primary">
+        <i class="bi bi-pencil"></i> Izmeni
+      </a>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Osnovne informacije</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4">ID</dt>
+            <dd class="col-sm-8"><%= role.id %></dd>
+
+            <dt class="col-sm-4">Naziv</dt>
+            <dd class="col-sm-8"><%= role.naziv %></dd>
+
+            <dt class="col-sm-4">Sistemski naziv</dt>
+            <dd class="col-sm-8"><%= role.sistemskiNaziv %></dd>
+
+            <dt class="col-sm-4">Broj dozvola</dt>
+            <dd class="col-sm-8"><%= role.dozvole.length %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Vreme</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-6">Kreirana</dt>
+            <dd class="col-sm-6"><%= role.vreme.kreirana %></dd>
+
+            <dt class="col-sm-6">Poslednja izmena</dt>
+            <dd class="col-sm-6"><%= role.vreme.poslednjaIzmena %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Dozvole</h5>
+        </div>
+        <div class="card-body">
+          <% if (role.dozvole && role.dozvole.length) { %>
+            <ul class="list-group list-group-flush">
+              <% role.dozvole.forEach(perm => { %>
+                <li class="list-group-item"><i class="bi bi-check-lg text-success me-2"></i> <%= perm %></li>
+              <% }) %>
+            </ul>
+          <% } else { %>
+            <p class="text-muted">Nema dodeljenih dozvola.</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../includes/end') %>

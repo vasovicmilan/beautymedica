@@ -1,0 +1,255 @@
+<%
+  const isEdit = typeof service !== 'undefined' && service !== null;
+  const formTitle = isEdit ? 'Izmena usluge' : 'Dodavanje nove usluge';
+  const formAction = isEdit ? '/admin/usluge/izmena' : '/admin/usluge/dodavanje';
+  const submitBtnText = isEdit ? 'Ažuriraj' : 'Dodaj';
+
+  function rawValue(field) {
+    if (!isEdit) return '';
+    return service[field] !== undefined ? service[field] : '';
+  }
+  function rawCheck(field) {
+    if (!isEdit) return false;
+    return service[field] === true;
+  }
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2"><%= formTitle %></h1>
+    <a href="/admin/usluge" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left"></i> Nazad
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <form action="<%= formAction %>" method="POST" enctype="multipart/form-data" id="serviceForm">
+        <% if (isEdit) { %>
+          <input type="hidden" name="_method" value="PUT">
+          <input type="hidden" name="id" value="<%= service.id %>">
+        <% } %>
+
+        <!-- Basic info -->
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <label for="name" class="form-label">Naziv *</label>
+            <input type="text" class="form-control" id="name" name="name" value="<%= rawValue('name') %>" required>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="type" class="form-label">Tip *</label>
+            <select class="form-select" id="type" name="type" required>
+              <option value="esma" <%= (rawValue('type') === 'esma') ? 'selected' : '' %>>ESMA</option>
+              <option value="massage" <%= (rawValue('type') === 'massage') ? 'selected' : '' %>>Masaža</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <div class="form-check form-switch mt-4">
+              <input class="form-check-input" type="checkbox" id="highlight" name="highlight" <%= rawCheck('highlight') ? 'checked' : '' %>>
+              <label class="form-check-label" for="highlight">Istaknuto na početnoj</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="shortDescription" class="form-label">Kratak opis</label>
+          <textarea class="form-control" id="shortDescription" name="shortDescription" rows="2"><%= rawValue('shortDescription') %></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="longDescription" class="form-label">Dug opis</label>
+          <textarea class="form-control" id="longDescription" name="longDescription" rows="4"><%= rawValue('longDescription') %></textarea>
+        </div>
+
+        <!-- Image -->
+        <hr class="my-4">
+        <h5 class="mb-3">Slika usluge</h5>
+        <% if (isEdit && service.image && service.image.img) { %>
+          <div class="mb-3">
+            <img src="<%= service.image.img %>" alt="<%= service.image.imgDesc || service.name %>" style="max-height: 100px;" class="img-thumbnail">
+            <div class="form-check mt-2">
+              <input class="form-check-input" type="checkbox" id="removeImage" name="removeImage" value="1">
+              <label class="form-check-label" for="removeImage">Obriši postojeću sliku</label>
+            </div>
+          </div>
+        <% } %>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="imageFile" class="form-label">Izaberite sliku (JPEG, PNG, WebP)</label>
+            <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/jpeg,image/png,image/webp">
+          </div>
+          <div class="col-md-6">
+            <label for="imageAlt" class="form-label">Opis slike (alt)</label>
+            <input type="text" class="form-control" id="imageAlt" name="imageAlt" value="<%= rawValue('imageDesc') %>">
+          </div>
+        </div>
+
+        <!-- Categories, Tags, Employees -->
+        <hr class="my-4">
+        <h5 class="mb-3">Povezivanje</h5>
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label for="categories" class="form-label">Kategorije</label>
+            <select multiple class="form-select" id="categories" name="categories" size="5">
+              <% categories.forEach(cat => { %>
+                <option value="<%= cat._id %>" <%= (serviceCategoryIds && serviceCategoryIds.includes(cat._id.toString())) ? 'selected' : '' %>><%= cat.name %></option>
+              <% }) %>
+            </select>
+            <small class="text-muted">Držite Ctrl za višestruki odabir.</small>
+          </div>
+          <div class="col-md-4">
+            <label for="tags" class="form-label">Tagovi</label>
+            <select multiple class="form-select" id="tags" name="tags" size="5">
+              <% tags.forEach(tag => { %>
+                <option value="<%= tag._id %>" <%= (serviceTagIds && serviceTagIds.includes(tag._id.toString())) ? 'selected' : '' %>><%= tag.name %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="employees" class="form-label">Zaposleni</label>
+            <select multiple class="form-select" id="employees" name="employees" size="5">
+              <% employees.forEach(emp => { %>
+                <option value="<%= emp._id %>" <%= (serviceEmployeeIds && serviceEmployeeIds.includes(emp._id.toString())) ? 'selected' : '' %>><%= emp.userId?.firstName || 'Nepoznat' %> <%= emp.userId?.lastName || '' %></option>
+              <% }) %>
+            </select>
+          </div>
+        </div>
+
+        <!-- SEO Keywords -->
+        <div class="mb-3">
+          <label for="seoKeywords" class="form-label">SEO ključne reči (odvojene zarezom)</label>
+          <input type="text" class="form-control" id="seoKeywords" name="seoKeywords" value="<%= Array.isArray(rawValue('seoKeywords')) ? rawValue('seoKeywords').join(', ') : rawValue('seoKeywords') %>">
+        </div>
+
+        <!-- Dynamic sections (containers) -->
+        <hr class="my-4">
+        <h5 class="mb-3">Karakteristike (features)</h5>
+        <div id="featuresContainer">
+          <% let features = isEdit && service.features ? service.features : []; %>
+          <% features.forEach((feat, idx) => { %>
+            <div class="feature-item card mb-3 p-3" data-index="<%= idx %>">
+              <div class="row g-2">
+                <div class="col-md-3"><input type="text" class="form-control" name="features[<%= idx %>][name]" placeholder="Naziv" value="<%= feat.name %>" required></div>
+                <div class="col-md-2"><input type="text" class="form-control" name="features[<%= idx %>][slug]" placeholder="Slug" value="<%= feat.slug %>" required></div>
+                <div class="col-md-3"><input type="text" class="form-control" name="features[<%= idx %>][description]" placeholder="Opis" value="<%= feat.description %>" required></div>
+                <div class="col-md-2"><input type="text" class="form-control" name="features[<%= idx %>][icon]" placeholder="Ikona (bi-xxx)" value="<%= feat.icon || '' %>"></div>
+                <div class="col-md-1"><input type="number" class="form-control" name="features[<%= idx %>][order]" placeholder="Redosled" value="<%= feat.order || 0 %>"></div>
+                <div class="col-md-1"><div class="form-check form-switch mt-2"><input class="form-check-input" type="checkbox" name="features[<%= idx %>][isActive]" <%= feat.isActive !== false ? 'checked' : '' %>></div></div>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-danger mt-2 remove-feature">Obriši karakteristiku</button>
+            </div>
+          <% }); %>
+        </div>
+        <button type="button" class="btn btn-sm btn-secondary mb-4" id="addFeature">+ Dodaj karakteristiku</button>
+
+        <!-- Packages -->
+        <hr class="my-4">
+        <h5 class="mb-3">Paketi (cenovnik)</h5>
+        <div id="packagesContainer">
+          <% let packages = isEdit && service.packages ? service.packages : []; %>
+          <% packages.forEach((pkg, idx) => { %>
+            <div class="package-item card mb-3 p-3" data-index="<%= idx %>">
+              <div class="row g-2">
+                <div class="col-md-2"><input type="text" class="form-control" name="packages[<%= idx %>][name]" placeholder="Naziv" value="<%= pkg.name %>" required></div>
+                <div class="col-md-2"><input type="text" class="form-control" name="packages[<%= idx %>][slug]" placeholder="Slug" value="<%= pkg.slug %>" required></div>
+                <div class="col-md-1"><input type="number" class="form-control" name="packages[<%= idx %>][sessions]" placeholder="Tretmana" value="<%= pkg.sessions %>" required></div>
+                <div class="col-md-2"><input type="number" class="form-control" name="packages[<%= idx %>][totalPrice]" placeholder="Ukupna cena" value="<%= pkg.totalPrice %>" required></div>
+                <div class="col-md-2"><input type="number" class="form-control" name="packages[<%= idx %>][basePrice]" placeholder="Osnovna cena" value="<%= pkg.basePrice || '' %>"></div>
+                <div class="col-md-1"><input type="text" class="form-control" name="packages[<%= idx %>][badge]" placeholder="Značka" value="<%= pkg.badge || '' %>"></div>
+                <div class="col-md-1"><div class="form-check form-switch mt-2"><input class="form-check-input" type="checkbox" name="packages[<%= idx %>][isBest]" <%= pkg.isBest ? 'checked' : '' %>></div></div>
+                <div class="col-md-1"><div class="form-check form-switch mt-2"><input class="form-check-input" type="checkbox" name="packages[<%= idx %>][isActive]" <%= pkg.isActive !== false ? 'checked' : '' %>></div></div>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-danger mt-2 remove-package">Obriši paket</button>
+            </div>
+          <% }); %>
+        </div>
+        <button type="button" class="btn btn-sm btn-secondary mb-4" id="addPackage">+ Dodaj paket</button>
+
+        <!-- Comparison Columns -->
+        <hr class="my-4">
+        <h5 class="mb-3">Tabela poređenja (kolone)</h5>
+        <div id="comparisonColumnsContainer">
+          <% let cols = isEdit && service.comparisonColumns ? service.comparisonColumns : []; %>
+          <% cols.forEach((col, idx) => { %>
+            <div class="input-group mb-2">
+              <input type="text" class="form-control" name="comparisonColumns[]" value="<%= col %>" placeholder="Naziv kolone">
+              <button type="button" class="btn btn-outline-danger remove-col">Obriši</button>
+            </div>
+          <% }); %>
+        </div>
+        <button type="button" class="btn btn-sm btn-secondary mb-4" id="addColumn">+ Dodaj kolonu</button>
+
+        <!-- Comparison Rows -->
+        <h5 class="mb-3">Redovi tabele poređenja</h5>
+        <div id="comparisonRowsContainer">
+          <% let rows = isEdit && service.comparisonTable ? service.comparisonTable : []; %>
+          <% rows.forEach((row, rowIdx) => { %>
+            <div class="comparison-row card mb-3 p-3" data-row-index="<%= rowIdx %>">
+              <div class="row g-2 mb-2">
+                <div class="col-md-3">
+                  <input type="text" class="form-control" name="comparisonRows[<%= rowIdx %>][label]" placeholder="Naziv reda" value="<%= row.label %>" required>
+                </div>
+                <div class="col-md-9 d-flex align-items-end justify-content-end">
+                  <button type="button" class="btn btn-sm btn-outline-danger remove-row">Obriši red</button>
+                </div>
+              </div>
+              <div class="values-container">
+                <% let values = row.values || []; %>
+                <% values.forEach((val, valIdx) => { %>
+                  <div class="input-group mb-2">
+                    <input type="text" class="form-control" name="comparisonRows[<%= rowIdx %>][values][]" value="<%= val %>" placeholder="Vrednost za kolonu <%= valIdx+1 %>">
+                    <button type="button" class="btn btn-outline-danger remove-value">Obriši</button>
+                  </div>
+                <% }); %>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-secondary add-value">+ Dodaj vrednost</button>
+            </div>
+          <% }); %>
+        </div>
+        <button type="button" class="btn btn-sm btn-secondary mb-4" id="addRow">+ Dodaj red</button>
+
+        <!-- FAQ -->
+        <hr class="my-4">
+        <h5 class="mb-3">Česta pitanja (FAQ)</h5>
+        <div id="faqContainer">
+          <% let faqs = isEdit && service.faq ? service.faq : []; %>
+          <% faqs.forEach((faqItem, idx) => { %>
+            <div class="faq-item card mb-3 p-3" data-faq-index="<%= idx %>">
+              <div class="row g-2 mb-2">
+                <div class="col-md-11">
+                  <input type="text" class="form-control" name="faq[<%= idx %>][question]" placeholder="Pitanje" value="<%= faqItem.question %>" required>
+                </div>
+                <div class="col-md-1">
+                  <button type="button" class="btn btn-sm btn-outline-danger remove-faq">Obriši</button>
+                </div>
+              </div>
+              <textarea class="form-control" name="faq[<%= idx %>][answer]" rows="2" placeholder="Odgovor" required><%= faqItem.answer %></textarea>
+            </div>
+          <% }); %>
+        </div>
+        <button type="button" class="btn btn-sm btn-secondary mb-4" id="addFaq">+ Dodaj FAQ</button>
+
+        <!-- Active switch -->
+        <div class="form-check form-switch mt-3">
+          <input class="form-check-input" type="checkbox" id="isActive" name="isActive" <%= rawCheck('isActive') ? 'checked' : '' %>>
+          <label class="form-check-label" for="isActive">Aktivna usluga (prikazuje se na sajtu)</label>
+        </div>
+
+        <hr class="my-4">
+        <div class="d-flex justify-content-end">
+          <a href="/admin/usluge" class="btn btn-secondary me-2">Otkaži</a>
+          <button type="submit" class="btn btn-primary"><%= submitBtnText %></button>
+        </div>
+        <input type="hidden" name="CSRFToken" value="<%= csrfToken %>">
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="/js/admin-service-form.js"></script>
+<%- include('../../includes/end') %>

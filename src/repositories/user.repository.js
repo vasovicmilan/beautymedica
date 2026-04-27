@@ -41,7 +41,7 @@ export async function findAllUsers(populateFields = null) {
 
 export async function findUserById(id, populateFields = null) {
   let query = User.findById(id)
-    .select("firstName lastName email phone roleId isActive avatar lastLoginAt acceptedTerms createdAt updatedAt")
+    .select("firstName lastName email phone googleId roleId isActive avatar lastLoginAt acceptedTerms createdAt updatedAt")
     .lean();
   if (populateFields) {
     query = query.populate(populateFields);

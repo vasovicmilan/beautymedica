@@ -20,7 +20,21 @@ import logger from "./config/logger.config.js";
 import { csrfLocals, csrfWebOnly } from "./config/csrf.config.js";
 import { globalErrorHandler, notFoundHandler } from "./utils/error.util.js";
 
-dotenv.config();
+import { fileURLToPath } from 'url';
+import path from 'path';
+import "./models/category.model.js";
+import "./models/tag.model.js";
+import "./models/user.model.js";
+import "./models/role.model.js";
+import "./models/post.model.js";
+import "./models/service.model.js";
+import "./models/expert.model.js";
+import "./models/employee.model.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
 const app = express();
 

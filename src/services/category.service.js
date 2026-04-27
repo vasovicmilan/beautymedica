@@ -5,7 +5,7 @@ import {
   mapCategoryForPublic,
 } from '../mappers/category.mapper.js';
 import { notFound, badRequest, internalError } from '../utils/error.util.js';
-import logger from '../utils/logger.config.js';
+import logger from '../config/logger.config.js';
 import { buildCategorySeo } from '../seo/builders/category.builder.js'; 
 
 const SITE_CONFIG = {

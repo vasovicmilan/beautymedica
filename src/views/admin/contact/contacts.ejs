@@ -1,0 +1,89 @@
+<%
+  const currentUrl = '/admin/kontakti';
+  const queryParams = { search, status, type };
+  const totalPages = Math.ceil(total / limit);
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2">Kontakt poruke</h1>
+  </div>
+
+  <!-- Search form -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <form action="/admin/kontakti/pretraga" method="POST" class="row g-3">
+        <div class="col-md-3">
+          <label for="search" class="form-label">Pretraga</label>
+          <input type="text" class="form-control" id="search" name="search" value="<%= search || '' %>" placeholder="Ime, email, naslov...">
+        </div>
+        <div class="col-md-2">
+          <label for="status" class="form-label">Status</label>
+          <select class="form-select" id="status" name="status">
+            <option value="">Svi</option>
+            <option value="new" <%= status === 'new' ? 'selected' : '' %>>Nova</option>
+            <option value="in-progress" <%= status === 'in-progress' ? 'selected' : '' %>>U obradi</option>
+            <option value="resolved" <%= status === 'resolved' ? 'selected' : '' %>>Rešeno</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label for="type" class="form-label">Tip</label>
+          <select class="form-select" id="type" name="type">
+            <option value="">Svi</option>
+            <option value="contact" <%= type === 'contact' ? 'selected' : '' %>>Kontakt</option>
+            <option value="reservation" <%= type === 'reservation' ? 'selected' : '' %>>Rezervacija</option>
+            <option value="question" <%= type === 'question' ? 'selected' : '' %>>Pitanje</option>
+            <option value="complaint" <%= type === 'complaint' ? 'selected' : '' %>>Pritužba</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label for="limit" class="form-label">Prikaz po stranici</label>
+          <select class="form-select" id="limit" name="limit">
+            <option value="10">10</option>
+            <option value="20" selected>20</option>
+            <option value="50">50</option>
+          </select>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary w-100">Pretraži</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Tabela -->
+  <div class="card">
+    <div class="card-body p-0">
+      <%- include('../../includes/components/table', {
+        columns: [
+          { key: 'id', label: 'ID' },
+          { key: 'pošiljalac', label: 'Pošiljalac' },
+          { key: 'email', label: 'Email' },
+          { key: 'tip', label: 'Tip' },
+          { key: 'naslov', label: 'Naslov' },
+          { key: 'status', label: 'Status' },
+          { key: 'datum', label: 'Datum' }
+        ],
+        items: contacts,
+        actions: [
+          { type: 'link', url: '/admin/kontakti/detalji/', icon: 'bi-eye', color: 'outline-info', ariaLabel: 'Detalji' }
+        ]
+      }) %>
+    </div>
+  </div>
+
+  <!-- Paginacija -->
+  <% if (totalPages > 1) { %>
+    <%- include('../../includes/components/pagination', {
+      currentPage: page,
+      totalPages: totalPages,
+      baseUrl: currentUrl,
+      queryParams: queryParams
+    }) %>
+  <% } %>
+</div>
+
+<%- include('../../includes/end') %>

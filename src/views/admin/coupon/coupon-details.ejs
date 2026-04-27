@@ -1,0 +1,126 @@
+<%
+  if (!coupon) return;
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2">Detalji kupona</h1>
+    <div>
+      <a href="/admin/kuponi" class="btn btn-outline-secondary me-2">
+        <i class="bi bi-arrow-left"></i> Nazad
+      </a>
+      <a href="/admin/kuponi/izmena/<%= coupon.id %>" class="btn btn-primary">
+        <i class="bi bi-pencil"></i> Izmeni
+      </a>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Osnovne informacije -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Osnovne informacije</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4">ID</dt>
+            <dd class="col-sm-8"><%= coupon.id %></dd>
+
+            <dt class="col-sm-4">Kod</dt>
+            <dd class="col-sm-8"><%= coupon.osnovno.kod %></dd>
+
+            <dt class="col-sm-4">Tip</dt>
+            <dd class="col-sm-8"><%= coupon.osnovno.tip %></dd>
+
+            <dt class="col-sm-4">Popust</dt>
+            <dd class="col-sm-8"><%= coupon.osnovno.popust %></dd>
+
+            <dt class="col-sm-4">Aktivnost</dt>
+            <dd class="col-sm-8"><%= coupon.osnovno.aktivnost %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ograničenja -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Ograničenja</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-6">Max upotreba</dt>
+            <dd class="col-sm-6"><%= coupon.ograničenja.maxUpotreba %></dd>
+
+            <dt class="col-sm-6">Trenutno iskorišćeno</dt>
+            <dd class="col-sm-6"><%= coupon.ograničenja.trenutnoIskorišćeno %></dd>
+
+            <dt class="col-sm-6">Po korisniku</dt>
+            <dd class="col-sm-6"><%= coupon.ograničenja.poKorisniku %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vreme važenja -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Vreme važenja</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-6">Počinje</dt>
+            <dd class="col-sm-6"><%= coupon.vremeVaženja.počinje || '—' %></dd>
+
+            <dt class="col-sm-6">Ističe</dt>
+            <dd class="col-sm-6"><%= coupon.vremeVaženja.ističe || '—' %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vreme kreiranja i izmene -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Vreme</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-6">Kreiran</dt>
+            <dd class="col-sm-6"><%= coupon.vreme.kreiran %></dd>
+
+            <dt class="col-sm-6">Poslednja izmena</dt>
+            <dd class="col-sm-6"><%= coupon.vreme.poslednjeIzmenjen %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista korisnika koji su iskoristili kupon (opciono) -->
+    <% if (coupon.korisnici && coupon.korisnici.length) { %>
+      <div class="col-12">
+        <div class="card h-100">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">Korisnici koji su iskoristili kupon</h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <% coupon.korisnici.forEach(userId => { %>
+                <li class="list-group-item"><%= userId %></li>
+              <% }) %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<%- include('../../includes/end') %>

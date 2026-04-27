@@ -4,7 +4,7 @@ import {
   mapRoleForAdminDetail,
 } from '../mappers/role.mapper.js';
 import { notFound, badRequest, internalError } from '../utils/error.util.js';
-import logger from '../utils/logger.config.js';
+import logger from '../config/logger.config.js';
 
 function mapRole(role, viewType = 'short') {
   if (!role) return null;

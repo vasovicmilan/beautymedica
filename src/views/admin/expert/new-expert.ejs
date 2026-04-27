@@ -1,0 +1,100 @@
+<%
+  const isEdit = typeof expert !== 'undefined' && expert !== null;
+  const formTitle = isEdit ? 'Izmena stručnjaka' : 'Dodavanje stručnjaka';
+  const formAction = isEdit ? '/admin/eksperti/izmena' : '/admin/eksperti/dodavanje';
+  const submitBtnText = isEdit ? 'Ažuriraj' : 'Dodaj';
+
+  function rawValue(field) {
+    if (!isEdit) return '';
+    return expert[field] !== undefined ? expert[field] : '';
+  }
+  function rawCheck(field) {
+    if (!isEdit) return false;
+    return expert[field] === true;
+  }
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2"><%= formTitle %></h1>
+    <a href="/admin/eksperti" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left"></i> Nazad
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <form action="<%= formAction %>" method="POST" enctype="multipart/form-data">
+        <% if (isEdit) { %>
+          <input type="hidden" name="_method" value="PUT">
+          <input type="hidden" name="id" value="<%= expert._id %>">
+        <% } %>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="firstName" class="form-label">Ime *</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" value="<%= rawValue('firstName') %>" required>
+          </div>
+          <div class="col-md-6">
+            <label for="lastName" class="form-label">Prezime *</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" value="<%= rawValue('lastName') %>" required>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <label for="title" class="form-label">Titula *</label>
+            <input type="text" class="form-control" id="title" name="title" value="<%= rawValue('title') %>" required>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="bio" class="form-label">Biografija</label>
+          <textarea class="form-control" id="bio" name="bio" rows="5"><%= rawValue('bio') %></textarea>
+        </div>
+
+        <hr class="my-4">
+        <h5 class="mb-3">Slika</h5>
+        <% if (isEdit && expert.image && expert.image.img) { %>
+          <div class="mb-3">
+            <img src="<%= expert.image.img %>" alt="<%= expert.image.imgDesc || expert.name %>" style="max-height: 100px;" class="img-thumbnail">
+            <div class="form-check mt-2">
+              <input class="form-check-input" type="checkbox" id="removeImage" name="removeImage" value="1">
+              <label class="form-check-label" for="removeImage">Obriši postojeću sliku</label>
+            </div>
+          </div>
+        <% } %>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="imageFile" class="form-label">Izaberite sliku (JPEG, PNG, WebP)</label>
+            <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/jpeg,image/png,image/webp">
+            <small class="text-muted">Maksimalna veličina: 2MB.</small>
+          </div>
+          <div class="col-md-6">
+            <label for="imageAlt" class="form-label">Opis slike (alt)</label>
+            <input type="text" class="form-control" id="imageAlt" name="imageAlt" value="<%= isEdit && expert.image ? (expert.image.imgDesc || '') : '' %>">
+          </div>
+        </div>
+
+        <hr class="my-4">
+        <div class="form-check form-switch mt-3">
+          <input class="form-check-input" type="checkbox" id="isActive" name="isActive" <%= rawCheck('isActive') ? 'checked' : '' %>>
+          <label class="form-check-label" for="isActive">Aktivan stručnjak</label>
+        </div>
+
+        <hr class="my-4">
+        <div class="d-flex justify-content-end">
+          <a href="/admin/eksperti" class="btn btn-secondary me-2">Otkaži</a>
+          <button type="submit" class="btn btn-primary"><%= submitBtnText %></button>
+        </div>
+        <input type="hidden" name="CSRFToken" value="<%= csrfToken %>">
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('../../includes/end') %>

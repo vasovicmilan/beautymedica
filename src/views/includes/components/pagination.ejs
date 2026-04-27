@@ -1,0 +1,19 @@
+<%
+  const { currentPage, totalPages, baseUrl } = locals;
+  if (totalPages <= 1) return;
+%>
+<nav aria-label="Paginacija">
+  <ul class="pagination justify-content-center">
+    <% if (currentPage > 1) { %>
+      <li class="page-item"><a class="page-link" href="<%= baseUrl %>?page=<%= currentPage-1 %>">Prethodna</a></li>
+    <% } %>
+    <% for (let i = 1; i <= totalPages; i++) { %>
+      <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+        <a class="page-link" href="<%= baseUrl %>?page=<%= i %>"><%= i %></a>
+      </li>
+    <% } %>
+    <% if (currentPage < totalPages) { %>
+      <li class="page-item"><a class="page-link" href="<%= baseUrl %>?page=<%= currentPage+1 %>">Sledeća</a></li>
+    <% } %>
+  </ul>
+</nav>

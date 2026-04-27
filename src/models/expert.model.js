@@ -48,6 +48,4 @@ const ExpertSchema = new Schema(
   { timestamps: true }
 );
 
-ExpertSchema.index({ slug: 1 });
-
 export default model("Expert", ExpertSchema);

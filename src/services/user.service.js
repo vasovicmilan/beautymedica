@@ -7,7 +7,7 @@ import {
   mapUserForProfile,
 } from '../mappers/user.mapper.js';
 import { notFound, badRequest, internalError } from '../utils/error.util.js';
-import logger from '../utils/logger.config.js';
+import logger from '../config/logger.config.js';
 
 function mapUser(user, role, viewType = 'short', isOwnProfile = false) {
   if (!user) return null;
@@ -64,6 +64,22 @@ export async function findUsers(search = '', limit = 20, page = 1, raw = false) 
     };
   } catch (error) {
     logger.error({ error, search, limit, page }, 'findUsers failed');
+    throw internalError('Neuspešno dohvatanje korisnika');
+  }
+}
+
+export async function findAllUsers({ raw = false } = {}) {
+  try {
+    const result = await userRepository.findUsers({
+      limit: 1000,
+      page: 1,
+      isAdmin: true,
+      populateFields: { path: 'roleId', select: 'name' },
+    });
+    if (raw) return result.data;
+    return result.data.map(user => mapUser(user, 'admin', 'short'));
+  } catch (error) {
+    logger.error({ error }, 'findAllUsers failed');
     throw internalError('Neuspešno dohvatanje korisnika');
   }
 }

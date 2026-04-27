@@ -1,0 +1,61 @@
+<%
+  // Pretpostavka: req.session.user (ili res.locals.user) postoji
+  // Može se koristiti i res.locals.isAuthenticated
+  const user = locals.user || null;
+  const role = user?.role || 'guest';
+  const isAuthenticated = !!user;
+%>
+
+<nav class="navbar navbar-expand-lg sticky-top bg-white shadow-sm">
+  <div class="container">
+    <a class="navbar-brand fw-bold fs-4" href="/">
+      <i class="bi bi-flower2 text-primary me-2"></i>Beauty Medica
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarMain">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-3">
+        <!-- Javni linkovi (uvek vidljivi) -->
+        <li class="nav-item"><a class="nav-link" href="/">Početna</a></li>
+        <li class="nav-item"><a class="nav-link" href="/usluge">Usluge</a></li>
+        <li class="nav-item"><a class="nav-link" href="/blog">Blog</a></li>
+
+        <!-- Linkovi prema ulozi -->
+        <% if (!isAuthenticated) { %>
+          <li class="nav-item"><a class="btn btn-outline-primary btn-sm rounded-pill px-4" href="/auth/prijava">Prijava</a></li>
+        <% } else { %>
+          <!-- Zajednički linkovi za ulogovane korisnike -->
+          <% if (role === 'user') { %>
+            <li class="nav-item"><a class="nav-link" href="/profil">Moj profil</a></li>
+          <% } else if (role === 'employee') { %>
+            <li class="nav-item"><a class="nav-link" href="/employee/rezervacije">Moje rezervacije</a></li>
+            <li class="nav-item"><a class="nav-link" href="/profil">Moj profil</a></li>
+          <% } else if (role === 'admin') { %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                Admin panel
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/admin/korisnici">Korisnici</a></li>
+                <li><a class="dropdown-item" href="/admin/uloge">Uloge</a></li>
+                <li><a class="dropdown-item" href="/admin/usluge">Usluge</a></li>
+                <li><a class="dropdown-item" href="/admin/termini">Termini</a></li>
+                <li><a class="dropdown-item" href="/admin/zaposleni">Zaposleni</a></li>
+                <li><a class="dropdown-item" href="/admin/eksperti">Stručnjaci</a></li>
+                <li><a class="dropdown-item" href="/admin/objave">Blog</a></li>
+                <li><a class="dropdown-item" href="/admin/kategorije">Kategorije</a></li>
+                <li><a class="dropdown-item" href="/admin/oznake">Oznake</a></li>
+                <li><a class="dropdown-item" href="/admin/utisci">Utisci</a></li>
+                <li><a class="dropdown-item" href="/admin/kontakti">Kontakt poruke</a></li>
+                <li><a class="dropdown-item" href="/admin/kuponi">Kuponi</a></li>
+              </ul>
+            </li>
+          <% } %>
+          <!-- Zajednički logout za sve ulogovane -->
+          <li class="nav-item"><a class="btn btn-outline-danger btn-sm rounded-pill px-4" href="/auth/odjava">Odjava</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,82 @@
+<%
+  const service = locals.service;
+  const id = locals.id;
+  const badgeText = locals.badgeText;
+  const imageSide = locals.imageSide || 'left';
+  if (!service) return;
+  const sideClass = (imageSide === 'right') ? 'flex-row-reverse' : '';
+%>
+<section id="<%= id %>" class="py-5 features-bg">
+  <div class="container">
+    <div class="row align-items-center g-5 <%= sideClass %>">
+      <div class="col-lg-5">
+        <span class="badge-feature mb-3 d-inline-block" style="background: rgba(255,255,240,0.9);">
+          <i class="bi bi-cpu me-1"></i> <%= badgeText %>
+        </span>
+        <h2 class="fw-bold display-6"><%= service.naziv %></h2>
+        <p class="lead"><%= service.kratakOpis || '' %></p>
+        <p class="mb-4"><%= service.dugOpis || '' %></p>
+        <a href="#contact" class="btn btn-primary btn-lg rounded-pill px-5">Zakaži konsultaciju</a>
+      </div>
+      <div class="col-lg-7">
+        <div class="row g-4">
+          <% if (service.karakteristike && service.karakteristike.length) { %>
+            <% service.karakteristike.forEach(feature => { %>
+              <div class="col-md-4">
+                <div class="card feature-card-transparent h-100 p-3 text-center">
+                  <i class="bi <%= feature.ikona || 'bi-lightning-charge' %> fs-1 text-primary"></i>
+                  <h4 class="mt-2"><%= feature.naziv %></h4>
+                  <p><%= feature.opis %></p>
+                </div>
+              </div>
+            <% }) %>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cenovnik (paketi) – popravljen raspored -->
+    <% if (service.paketi && service.paketi.length) { %>
+      <div class="text-center mt-5 pt-4">
+        <h3 class="mb-4 fw-bold text-white">Cene <%= service.naziv %> tretmana</h3>
+        <div class="row g-4 justify-content-center">
+          <% service.paketi.forEach(pkg => { %>
+            <div class="col-md-4">
+              <div class="card p-3 shadow-sm <%= pkg.najbolji ? 'border-top-primary shadow-lg' : 'feature-card-transparent' %> h-100 d-flex flex-column">
+                <div class="card-body d-flex flex-column align-items-center text-center">
+                  <% if (pkg.najbolji) { %>
+                    <span class="badge bg-primary text-white mb-2">NAJBOLJE</span>
+                  <% } %>
+                  <h4><%= pkg.naziv %></h4>
+                  <h2 class="text-primary fw-bold"><%= pkg.ukupnaCena %></h2>
+                  <% if (pkg.osnovnaCena) { %>
+                    <small class="text-muted mb-2"><del><%= pkg.osnovnaCena %></del> Ušteda <%= pkg.usteda %></small>
+                  <% } %>
+                  <a href="#contact" class="btn <%= pkg.najbolji ? 'btn-primary' : 'btn-outline-primary' %> rounded-pill px-4 mt-auto">Izaberi</a>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+        <!-- Tabela poređenja -->
+        <% if (service.tabelaPoredjenja && service.tabelaPoredjenja.kolone && service.tabelaPoredjenja.redovi) { %>
+          <div class="table-responsive mt-5">
+            <table class="table table-bordered bg-white rounded-4 overflow-hidden">
+              <thead>
+                <tr><th></th><% service.tabelaPoredjenja.kolone.forEach(col => { %><th><%= col %></th><% }) %></tr>
+              </thead>
+              <tbody>
+                <% service.tabelaPoredjenja.redovi.forEach(row => { %>
+                  <tr>
+                    <td><%= row.label %></td>
+                    <% row.vrednosti.forEach(val => { %><td><%= val %></td><% }) %>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+</section>

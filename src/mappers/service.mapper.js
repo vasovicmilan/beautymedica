@@ -75,8 +75,8 @@ function getTagNames(service) {
 function mapGallery(gallery) {
   if (!gallery || !Array.isArray(gallery)) return [];
   return gallery.map(img => ({
-    url: img.url || null,
-    alt: img.alt || img.imgDesc || null,
+    url: img.img || null,
+    alt: img.imgDesc || null,
   }));
 }
 
@@ -101,8 +101,8 @@ export function mapServiceForAdminDetail(service) {
     dugOpis: service.longDescription || null,
     slika: service.image
       ? {
-          url: service.image.url || null,
-          alt: service.image.alt || service.image.imgDesc || service.name,
+          url: service.image.img || null,
+          alt: service.image.imgDesc || service.name,
         }
       : null,
     galerija: mapGallery(service.gallery),
@@ -136,8 +136,8 @@ export function mapServiceForPublicCard(service) {
     kratakOpis: service.shortDescription || null,
     slika: service.image
       ? {
-          url: service.image.url || null,
-          alt: service.image.alt || service.image.imgDesc || service.name,
+          url: service.image.img || null,
+          alt: service.image.imgDesc || service.name,
         }
       : null,
     cenaOd: getFirstPackagePrice(service),
@@ -155,8 +155,8 @@ export function mapServiceForPublicDetail(service) {
     dugOpis: service.longDescription || null,
     slika: service.image
       ? {
-          url: service.image.url || null,
-          alt: service.image.alt || service.image.imgDesc || service.name,
+          url: service.image.img || null,
+          alt: service.image.imgDesc || service.name,
         }
       : null,
     galerija: mapGallery(service.gallery),

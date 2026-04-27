@@ -1,18 +1,20 @@
 import { Router } from 'express';
-
-// import { validateCSRF } from "../../middlewares/validators/csrf.validator.js";
-// import { validateSpam } from '../../middlewares/validators/spam.validator.js';
-// import { loginLimiter } from "../../middlewares/rate.limiter.middleware.js";
+import * as authController from '../../controllers/web/auth/auth.controller.js';
 
 const router = Router();
 
-// GET rute za renderovanje stranica
-// router.get('/prijava', authController.getLoginPage);
-// router.get('/registracija', authController.getRegisterPage);
+// Prikaz stranica za prijavu i registraciju
+router.get('/prijava', authController.showLoginPage);
+router.get('/registracija', authController.showRegisterPage);
 
-// POST rute za obradu formi
-// router.post('/prijava', loginLimiter, validateCSRF, validateSpam, ...validateLoginWeb, authController.postLogin);
-// router.post('/odjava', validateCSRF, validateSpam, authController.postLogout);
-// router.post('/registracija', validateCSRF, validateSpam, ...validateRegisterWeb, authController.postRegister);
+// Google OAuth rute
+router.get('/google', authController.redirectToGoogle);
+router.get('/google/callback', authController.googleCallback);
+
+// Odjava (GET zahtev – uništava sesiju)
+router.get('/odjava', authController.logout);
+
+// API: dohvatanje trenutnog korisnika (za proveru sesije)
+router.get('/trenutni-korisnik', authController.currentUser);
 
 export default router;

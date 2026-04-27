@@ -1,0 +1,94 @@
+<%
+  if (!expert) return;
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2">Detalji stručnjaka</h1>
+    <div>
+      <a href="/admin/eksperti" class="btn btn-outline-secondary me-2">
+        <i class="bi bi-arrow-left"></i> Nazad
+      </a>
+      <a href="/admin/eksperti/izmena/<%= expert.id %>" class="btn btn-primary">
+        <i class="bi bi-pencil"></i> Izmeni
+      </a>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Osnovne informacije</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4">ID</dt>
+            <dd class="col-sm-8"><%= expert.id %></dd>
+
+            <dt class="col-sm-4">Ime i prezime</dt>
+            <dd class="col-sm-8"><%= expert.imePrezime %></dd>
+
+            <dt class="col-sm-4">Titula</dt>
+            <dd class="col-sm-8"><%= expert.titula %></dd>
+
+            <dt class="col-sm-4">Slug</dt>
+            <dd class="col-sm-8"><%= expert.slug %></dd>
+
+            <dt class="col-sm-4">Aktivnost</dt>
+            <dd class="col-sm-8"><%= expert.aktivnost %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Slika</h5>
+        </div>
+        <div class="card-body text-center">
+          <% if (expert.slika && expert.slika.url) { %>
+            <img src="<%= expert.slika.url %>" alt="<%= expert.slika.alt || expert.imePrezime %>" class="img-fluid rounded" style="max-height: 200px;">
+            <p class="mt-2 text-muted"><%= expert.slika.alt || 'Nema opisa slike' %></p>
+          <% } else { %>
+            <p class="text-muted">Nema slike</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Biografija</h5>
+        </div>
+        <div class="card-body">
+          <p><%= expert.biografija || '—' %></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Vreme</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-6">Kreiran</dt>
+            <dd class="col-sm-6"><%= expert.vreme.kreiran %></dd>
+
+            <dt class="col-sm-6">Ažuriran</dt>
+            <dd class="col-sm-6"><%= expert.vreme.azuriran %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../includes/end') %>

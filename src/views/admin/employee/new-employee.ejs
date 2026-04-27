@@ -1,0 +1,94 @@
+<%
+  const isEdit = typeof employee !== 'undefined' && employee !== null;
+  const formTitle = isEdit ? 'Izmena zaposlenog' : 'Dodavanje novog zaposlenog';
+  const formAction = isEdit ? '/admin/zaposleni/izmena' : '/admin/zaposleni/dodavanje';
+  const submitBtnText = isEdit ? 'Ažuriraj' : 'Dodaj';
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2"><%= formTitle %></h1>
+    <a href="/admin/zaposleni" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left"></i> Nazad
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <form action="<%= formAction %>" method="POST">
+        <% if (isEdit) { %>
+          <input type="hidden" name="_method" value="PUT">
+          <input type="hidden" name="id" value="<%= employee._id %>">
+        <% } %>
+
+        <!-- User selection -->
+        <div class="mb-3">
+          <label for="userId" class="form-label">Korisnik *</label>
+          <select class="form-select" id="userId" name="userId" required>
+            <option value="">Izaberite korisnika</option>
+            <% users.forEach(user => { %>
+              <option value="<%= user._id %>" 
+                <%= (isEdit && employee.userId?._id?.toString() === user._id.toString()) ? 'selected' : '' %>>
+                <%= user.firstName %> <%= user.lastName %> (<%= user.email %>)
+              </option>
+            <% }) %>
+          </select>
+          <small class="text-muted">
+            <% if (isEdit) { %>
+              Možete promeniti korisnika (samo oni koji nisu već zaposleni).
+            <% } else { %>
+              Samo korisnici koji još nisu zaposleni.
+            <% } %>
+          </small>
+        </div>
+
+        <!-- Services (multiselect) -->
+        <div class="mb-3">
+          <label for="services" class="form-label">Usluge</label>
+          <select multiple class="form-select" id="services" name="services" size="5">
+            <% services.forEach(service => { %>
+              <option value="<%= service._id %>"
+                <%= (isEdit && employeeServiceIds && employeeServiceIds.includes(service._id.toString())) ? 'selected' : '' %>>
+                <%= service.name %>
+              </option>
+            <% }) %>
+          </select>
+          <small class="text-muted">Držite Ctrl za višestruki odabir.</small>
+        </div>
+
+        <!-- Working Hours (JSON) -->
+        <div class="mb-3">
+          <label for="workingHours" class="form-label">Radno vreme (JSON)</label>
+          <textarea class="form-control" id="workingHours" name="workingHours" rows="6"
+            ><%= isEdit ? JSON.stringify(employee.workingHours || [], null, 2) : '' %></textarea>
+          <small class="text-muted">Format: [{ "day": "monday", "slots": [{ "from": "09:00", "to": "17:00" }] }]</small>
+        </div>
+
+        <!-- Active switch -->
+        <div class="mb-3 form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="isActive" name="isActive"
+            <%= (isEdit && employee.isActive === true) ? 'checked' : (isEdit ? '' : 'checked') %>>
+          <label class="form-check-label" for="isActive">Aktivan zaposleni</label>
+        </div>
+
+        <!-- Notes -->
+        <div class="mb-3">
+          <label for="notes" class="form-label">Napomena</label>
+          <textarea class="form-control" id="notes" name="notes" rows="3"><%= isEdit ? (employee.notes || '') : '' %></textarea>
+        </div>
+
+        <hr class="my-4">
+        <div class="d-flex justify-content-end">
+          <a href="/admin/zaposleni" class="btn btn-secondary me-2">Otkaži</a>
+          <button type="submit" class="btn btn-primary"><%= submitBtnText %></button>
+        </div>
+        <input type="hidden" name="CSRFToken" value="<%= csrfToken %>">
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('../../includes/end') %>

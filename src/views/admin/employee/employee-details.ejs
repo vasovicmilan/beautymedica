@@ -1,0 +1,121 @@
+<%
+  if (!employee) return;
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2">Detalji zaposlenog</h1>
+    <div>
+      <a href="/admin/zaposleni" class="btn btn-outline-secondary me-2">
+        <i class="bi bi-arrow-left"></i> Nazad
+      </a>
+      <a href="/admin/zaposleni/izmena/<%= employee.id %>" class="btn btn-primary">
+        <i class="bi bi-pencil"></i> Izmeni
+      </a>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Osnovne informacije -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Osnovne informacije</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4">ID</dt>
+            <dd class="col-sm-8"><%= employee.id %></dd>
+
+            <dt class="col-sm-4">Ime i prezime</dt>
+            <dd class="col-sm-8"><%= employee.korisnik.imePrezime %></dd>
+
+            <dt class="col-sm-4">Email</dt>
+            <dd class="col-sm-8"><%= employee.korisnik.email %></dd>
+
+            <dt class="col-sm-4">Telefon</dt>
+            <dd class="col-sm-8"><%= employee.korisnik.telefon || '—' %></dd>
+
+            <dt class="col-sm-4">Aktivan</dt>
+            <dd class="col-sm-8"><%= employee.aktivan %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Usluge -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Usluge</h5>
+        </div>
+        <div class="card-body">
+          <% if (employee.usluge && employee.usluge.length) { %>
+            <ul class="list-group list-group-flush">
+              <% employee.usluge.forEach(usluga => { %>
+                <li class="list-group-item"><%= usluga %></li>
+              <% }) %>
+            </ul>
+          <% } else { %>
+            <p class="text-muted">Nema dodeljenih usluga.</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Radno vreme -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Radno vreme</h5>
+        </div>
+        <div class="card-body">
+          <% if (employee.radnoVreme && employee.radnoVreme.length) { %>
+            <dl class="row mb-0">
+              <% employee.radnoVreme.forEach(day => { %>
+                <dt class="col-sm-4"><%= day.dan %></dt>
+                <dd class="col-sm-8"><%= day.termini.join(', ') || '—' %></dd>
+              <% }) %>
+            </dl>
+          <% } else { %>
+            <p class="text-muted">Nema definisanog radnog vremena.</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Napomena -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Napomena</h5>
+        </div>
+        <div class="card-body">
+          <p><%= employee.napomena || '—' %></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vreme -->
+    <div class="col-12">
+      <div class="card h-100">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Vreme</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-3">Kreiran</dt>
+            <dd class="col-sm-9"><%= employee.vreme.kreiran %></dd>
+            <dt class="col-sm-3">Ažuriran</dt>
+            <dd class="col-sm-9"><%= employee.vreme.azuriran %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../includes/end') %>

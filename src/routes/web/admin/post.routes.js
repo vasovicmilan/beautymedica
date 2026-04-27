@@ -2,8 +2,7 @@ import { Router } from 'express';
 import {
   listPosts,
   postDetail,
-  addPostForm,
-  editPostForm,
+  postForm,
   createPost,
   updatePost,
   searchPosts,
@@ -14,8 +13,8 @@ const router = Router();
 
 router.get('/', listPosts);
 router.get('/detalji/:postId', postDetail);
-router.get('/dodavanje', addPostForm);
-router.get('/izmena/:postId', editPostForm);
+router.get('/dodavanje', postForm);
+router.get('/izmena/:postId', postForm);
 router.post('/dodavanje', createPost);
 router.put('/izmena', updatePost);
 router.post('/pretraga', searchPosts);

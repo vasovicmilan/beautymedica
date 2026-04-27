@@ -1,6 +1,15 @@
 import * as couponService from '../../../services/coupon.service.js';
 import { badRequest } from '../../../utils/error.util.js';
 
+// Helper za SEO na admin stranicama
+function getAdminSeo(title) {
+  return {
+    title: `Admin - ${title}`,
+    robots: 'noindex, follow',
+    description: '',
+  };
+}
+
 export async function listCoupons(req, res, next) {
   try {
     const { search, limit, page } = req.query;
@@ -9,12 +18,14 @@ export async function listCoupons(req, res, next) {
       limit ? parseInt(limit) : 20,
       page ? parseInt(page) : 1
     );
-    res.render('admin/coupons/index', {
+    const seo = getAdminSeo('Kuponi');
+    res.render('admin/coupon/coupons', {
       coupons: result.data,
       total: result.total,
       page: result.page,
       limit: result.limit,
       search,
+      seo,
     });
   } catch (error) {
     next(error);
@@ -25,7 +36,8 @@ export async function couponDetail(req, res, next) {
   try {
     const { couponId } = req.params;
     const coupon = await couponService.findCouponById(couponId);
-    res.render('admin/coupons/detail', { coupon });
+    const seo = getAdminSeo(`Kupon: ${coupon.osnovno.kod}`);
+    res.render('admin/coupon/coupon-details', { coupon, seo });
   } catch (error) {
     next(error);
   }
@@ -33,7 +45,8 @@ export async function couponDetail(req, res, next) {
 
 export async function addCouponForm(req, res, next) {
   try {
-    res.render('admin/coupons/add');
+    const seo = getAdminSeo('Dodavanje kupona');
+    res.render('admin/coupon/new-coupon', { seo });
   } catch (error) {
     next(error);
   }
@@ -43,7 +56,8 @@ export async function editCouponForm(req, res, next) {
   try {
     const { couponId } = req.params;
     const coupon = await couponService.findCouponById(couponId, true); // raw podaci
-    res.render('admin/coupons/edit', { coupon });
+    const seo = getAdminSeo(`Izmena kupona: ${coupon.code}`);
+    res.render('admin/coupon/new-coupon', { coupon, seo });
   } catch (error) {
     next(error);
   }
@@ -79,7 +93,7 @@ export async function createCoupon(req, res, next) {
 
     await couponService.createCoupon(data);
     req.session.flash = { type: 'success', message: 'Kupon je uspešno kreiran' };
-    res.redirect('/admin/coupons');
+    res.redirect('/admin/kuponi');
   } catch (error) {
     next(error);
   }
@@ -114,7 +128,7 @@ export async function updateCoupon(req, res, next) {
 
     await couponService.updateCouponById(id, data);
     req.session.flash = { type: 'success', message: 'Kupon je uspešno ažuriran' };
-    res.redirect(`/admin/coupons/detalji/${id}`);
+    res.redirect(`/admin/kuponi/detalji/${id}`);
   } catch (error) {
     next(error);
   }
@@ -127,7 +141,7 @@ export async function searchCoupons(req, res, next) {
     if (search) query.append('search', search);
     if (limit) query.append('limit', limit);
     if (page) query.append('page', page);
-    res.redirect(`/admin/coupons?${query.toString()}`);
+    res.redirect(`/admin/kuponi?${query.toString()}`);
   } catch (error) {
     next(error);
   }
@@ -138,7 +152,7 @@ export async function deleteCoupon(req, res, next) {
     const { couponId } = req.body;
     await couponService.deleteCouponById(couponId);
     req.session.flash = { type: 'success', message: 'Kupon je obrisan' };
-    res.redirect('/admin/coupons');
+    res.redirect('/admin/kuponi');
   } catch (error) {
     next(error);
   }

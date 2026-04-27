@@ -1,0 +1,59 @@
+<%
+  const currentUrl = '/admin/uloge';
+  const queryParams = { search };
+  const totalPages = Math.ceil(total / limit);
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2">Uloge</h1>
+    <a href="/admin/uloge/dodavanje" class="btn btn-primary">
+      <i class="bi bi-plus-circle"></i> Nova uloga
+    </a>
+  </div>
+
+  <!-- Search form -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <form action="/admin/uloge/pretraga" method="POST" class="row g-3">
+        <div class="col-md-8">
+          <label for="search" class="form-label">Pretraga</label>
+          <input type="text" class="form-control" id="search" name="search" value="<%= search || '' %>" placeholder="Naziv uloge...">
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary w-100">Pretraži</button>
+        </div>
+        <input type="hidden" name="CSRFToken" value="<%= csrfToken %>">
+      </form>
+    </div>
+  </div>
+
+  <!-- Tabela -->
+  <div class="card">
+    <div class="card-body p-0">
+      <%- include('../../includes/components/table', {
+        items: roles,
+        actions: [
+          { type: 'link', url: '/admin/uloge/detalji/', icon: 'bi-eye', color: 'outline-info', ariaLabel: 'Detalji' },
+          { type: 'link', url: '/admin/uloge/izmena/', icon: 'bi-pencil', color: 'outline-secondary', ariaLabel: 'Izmena' },
+          { type: 'form', formAction: '/admin/uloge/brisanje', icon: 'bi-trash', color: 'outline-danger', ariaLabel: 'Brisanje', confirm: 'Da li ste sigurni da želite da obrišete ovu ulogu?' }
+        ]
+      }) %>
+    </div>
+  </div>
+
+  <!-- Paginacija -->
+  <% if (totalPages > 1) { %>
+    <%- include('../../includes/components/pagination', {
+      currentPage: page,
+      totalPages: totalPages,
+      baseUrl: currentUrl,
+      queryParams: queryParams
+    }) %>
+  <% } %>
+</div>
+
+<%- include('../../includes/end') %>

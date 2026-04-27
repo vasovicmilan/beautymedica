@@ -97,7 +97,11 @@ export async function createTestimonial(data) {
 }
 
 export async function updateTestimonialById(id, data) {
-  return Testimonial.findByIdAndUpdate(id, { $set: data }, { new: true, runValidators: true }).lean();
+  return Testimonial.findByIdAndUpdate(
+    id,
+    { $set: data },
+    { returnDocument: 'after', runValidators: true }
+  ).lean();
 }
 
 export async function deleteTestimonialById(id) {

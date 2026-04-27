@@ -5,7 +5,7 @@ import {
   mapTestimonialForPublic,
 } from '../mappers/testimonial.mapper.js';
 import { notFound, badRequest, internalError } from '../utils/error.util.js';
-import logger from '../utils/logger.config.js';
+import logger from '../config/logger.config.js';
 
 function mapTestimonial(testimonial, role = 'public', viewType = 'short') {
   if (!testimonial) return null;
@@ -94,13 +94,13 @@ export async function findTestimonials({
 
 export async function findTestimonialById(id, role = 'admin', raw = false) {
   try {
-    const testimonial = await testimonialRepository.findTestimonialById(id, {
-      path: [
+    const testimonial = await testimonialRepository.findTestimonialById(id,
+      [
         { path: 'user', select: 'firstName lastName email' },
         { path: 'service', select: 'name' },
         { path: 'employee', populate: { path: 'userId', select: 'firstName lastName' } },
       ],
-    });
+    );
     if (!testimonial) notFound('Utisak');
     if (role !== 'admin' && !testimonial.approved) {
       notFound('Utisak');

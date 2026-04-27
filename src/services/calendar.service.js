@@ -2,7 +2,7 @@ import * as appointmentRepository from '../repositories/appointment.repository.j
 import * as employeeRepository from '../repositories/employee.repository.js';
 import * as serviceRepository from '../repositories/service.repository.js';
 import { badRequest, internalError } from '../utils/error.util.js';
-import logger from '../utils/logger.config.js';
+import logger from '../config/logger.config.js';
 
 export async function getAvailableSlotsForEmployee(employeeId, serviceId, date, options = {}) {
   try {

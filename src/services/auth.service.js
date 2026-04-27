@@ -1,7 +1,7 @@
 import * as userRepository from '../repositories/user.repository.js';
 import * as roleRepository from '../repositories/role.repository.js';
 import { notFound, badRequest, internalError } from '../utils/error.util.js';
-import logger from '../utils/logger.config.js';
+import logger from '../config/logger.config.js';
 
 export async function findOrCreateGoogleUser(googleProfile) {
   try {

@@ -1,0 +1,14 @@
+<%
+  // Očekuje: testimonial (objekat sa poljima: ime, ocena, komentar, usluga, terapeut, datum)
+  const t = locals.testimonial;
+  if (!t) return;
+%>
+<div class="bg-white text-dark p-4 rounded-4 h-100">
+  <div class="text-warning mb-2">
+    <% for (let i=0; i<t.ocena; i++) { %><i class="bi bi-star-fill"></i><% } %>
+    <% for (let i=t.ocena; i<5; i++) { %><i class="bi bi-star"></i><% } %>
+  </div>
+  <p>"<%= t.komentar %>"</p>
+  <strong>- <%= t.ime %></strong>
+  <% if (t.usluga) { %><br><small class="text-muted"><%= t.usluga %></small><% } %>
+</div>

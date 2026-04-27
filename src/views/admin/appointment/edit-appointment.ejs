@@ -1,0 +1,71 @@
+<%
+  if (!appointment) return;
+  const statuses = ['pending','confirmed','rejected','cancelled','completed'];
+  const statusLabels = { pending:'Na čekanju', confirmed:'Potvrđeno', rejected:'Odbijeno', cancelled:'Otkazano', completed:'Završeno' };
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2">Izmena termina</h1>
+    <a href="/admin/termini" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left"></i> Nazad
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <form action="/admin/termini/izmena" method="POST">
+        <input type="hidden" name="_method" value="PUT">
+        <input type="hidden" name="id" value="<%= appointment._id %>">
+        <input type="hidden" name="CSRFToken" value="<%= csrfToken %>">
+
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label for="status" class="form-label">Status</label>
+            <select class="form-select" id="status" name="status">
+              <% statuses.forEach(s => { %>
+                <option value="<%= s %>" <%= appointment.status === s ? 'selected' : '' %>><%= statusLabels[s] %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="employee" class="form-label">Terapeut</label>
+            <select class="form-select" id="employee" name="employee">
+              <option value="">Nije izabran</option>
+              <% employees.forEach(emp => { %>
+                <option value="<%= emp._id %>" <%= (appointment.employee && appointment.employee._id?.toString() === emp._id.toString()) ? 'selected' : '' %>>
+                  <%= emp.userId?.firstName %> <%= emp.userId?.lastName %>
+                </option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="startTime" class="form-label">Početak termina</label>
+            <input type="datetime-local" class="form-control" id="startTime" name="startTime" value="<%= new Date(appointment.startTime).toISOString().slice(0,16) %>">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="note" class="form-label">Napomena korisnika</label>
+          <textarea class="form-control" id="note" name="note" rows="2"><%= appointment.note || '' %></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="rejectionReason" class="form-label">Razlog odbijanja (ako je status odbijen)</label>
+          <textarea class="form-control" id="rejectionReason" name="rejectionReason" rows="2"><%= appointment.rejectionReason || '' %></textarea>
+        </div>
+
+        <hr>
+        <div class="d-flex justify-content-end">
+          <a href="/admin/termini" class="btn btn-secondary me-2">Otkaži</a>
+          <button type="submit" class="btn btn-primary">Sačuvaj izmene</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('../../includes/end') %>

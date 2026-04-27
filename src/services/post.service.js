@@ -6,7 +6,7 @@ import {
   mapPostForPublicDetail,
 } from '../mappers/post.mapper.js';
 import { notFound, badRequest, internalError } from '../utils/error.util.js';
-import logger from '../utils/logger.config.js';
+import logger from '../config/logger.config.js';
 import { buildPostSeo } from '../seo/builders/post.builder.js';
 
 const SITE_CONFIG = {
@@ -90,6 +90,7 @@ export async function findPosts({
       limit: result.limit,
     };
   } catch (error) {
+    console.error(error);
     logger.error({ error, search, limit, page, isAdmin }, 'findPosts failed');
     throw internalError('Neuspešno dohvatanje postova');
   }
@@ -97,13 +98,12 @@ export async function findPosts({
 
 export async function findPostDetailsById(id, isAdmin = false, raw = false) {
   try {
-    const post = await postRepository.findPostById(id, {
-      path: [
-        { path: 'expert', select: 'firstName lastName bio image' },
-        { path: 'categories', select: 'name slug' },
-        { path: 'tags', select: 'name slug' },
-      ],
-    });
+    const post = await postRepository.findPostById(id, [
+      { path: 'expert', select: 'firstName lastName bio image' },
+      { path: 'categories', select: 'name slug' },
+      { path: 'tags', select: 'name slug' },
+    ],
+    );
     if (!post) notFound('Post');
     if (!isAdmin && !['published', 'featured'].includes(post.status)) {
       notFound('Post');

@@ -3,15 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title><%= title || 'EMS Studio' %></title>
-  <meta name="description" content="<%= description || 'EMS i wellness tretmani' %>">
-
-  <!-- Bootstrap CSS -->
+  <% if (seo) { %>
+    <title><%= seo.title %></title>
+    <% if (seo.description) { %>
+      <meta name="description" content="<%= seo.description %>">
+    <% } %>
+    <% if (seo.canonical) { %>
+      <link rel="canonical" href="<%= seo.canonical %>">
+    <% } %>
+    <meta name="robots" content="<%= seo.robots || 'index, follow' %>">
+    <% if (seo.meta && seo.meta.keywords) { %>
+      <meta name="keywords" content="<%= seo.meta.keywords %>">
+    <% } %>
+    
+    <!-- Open Graph (samo ako postoji) -->
+    <% if (seo.og) { %>
+      <meta property="og:title" content="<%= seo.og.title %>">
+      <meta property="og:description" content="<%= seo.og.description %>">
+      <meta property="og:url" content="<%= seo.og.url %>">
+      <meta property="og:type" content="<%= seo.og.type %>">
+      <meta property="og:image" content="<%= seo.og.image %>">
+      <meta property="og:site_name" content="<%= seo.og.site_name %>">
+    <% } %>
+    
+    <!-- Twitter Card (samo ako postoji) -->
+    <% if (seo.twitter) { %>
+      <meta name="twitter:card" content="<%= seo.twitter.card %>">
+      <meta name="twitter:title" content="<%= seo.twitter.title %>">
+      <meta name="twitter:description" content="<%= seo.twitter.description %>">
+      <meta name="twitter:image" content="<%= seo.twitter.image %>">
+    <% } %>
+  <% } else { %>
+    <title>Beauty Medica Center</title>
+    <meta name="description" content="ESMA tretmani i masaže">
+  <% } %>
+  
   <link href="/css/bootstrap.min1.css" rel="stylesheet">
-  <link href="/css/new.css" rel="stylesheet">
-  <!-- Custom CSS -->
-  <!-- <link href="/css/style.css" rel="stylesheet"> -->
+  <!-- <link href="/css/new.css" rel="stylesheet"> -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
-
 <body>

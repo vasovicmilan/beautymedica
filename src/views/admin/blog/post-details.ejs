@@ -1,0 +1,106 @@
+<%
+  if (!post) return;
+%>
+
+<%- include('../../includes/head', { seo }) %>
+<%- include('../../includes/components/navigation') %>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2">Detalji posta</h1>
+    <div>
+      <a href="/admin/objave" class="btn btn-outline-secondary me-2">
+        <i class="bi bi-arrow-left"></i> Nazad
+      </a>
+      <a href="/admin/objave/izmena/<%= post.id %>" class="btn btn-primary">
+        <i class="bi bi-pencil"></i> Izmeni
+      </a>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Osnovno -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-light"><h5>Osnovne informacije</h5></div>
+        <div class="card-body">
+          <dl class="row">
+            <dt class="col-sm-4">ID</dt><dd class="col-sm-8"><%= post.id %></dd>
+            <dt class="col-sm-4">Naslov</dt><dd class="col-sm-8"><%= post.naslov %></dd>
+            <dt class="col-sm-4">Slug</dt><dd class="col-sm-8"><%= post.slug %></dd>
+            <dt class="col-sm-4">Status</dt><dd class="col-sm-8"><%= post.status %></dd>
+            <dt class="col-sm-4">Indeksiranje</dt><dd class="col-sm-8"><%= post.indeksiranje %></dd>
+            <dt class="col-sm-4">Autor</dt><dd class="col-sm-8"><%= post.autor.ime %></dd>
+            <dt class="col-sm-4">Kratak opis</dt><dd class="col-sm-8"><%= post.kratakOpis || '—' %></dd>
+            <dt class="col-sm-4">Opis</dt><dd class="col-sm-8"><%= post.opis || '—' %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kategorije i tagovi -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-light"><h5>Kategorije i tagovi</h5></div>
+        <div class="card-body">
+          <p><strong>Kategorije:</strong> <%= post.kategorije.join(', ') || '—' %></p>
+          <p><strong>Tagovi:</strong> <%= post.tagovi.join(', ') || '—' %></p>
+        </div>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header bg-light"><h5>Slika</h5></div>
+        <div class="card-body text-center">
+          <% if (post.slika && post.slika.url) { %>
+            <img src="<%= post.slika.url %>" alt="<%= post.slika.alt || post.naslov %>" class="img-fluid rounded" style="max-height: 200px;">
+          <% } else { %>
+            <p class="text-muted">Nema slike</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sadržaj -->
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header bg-light"><h5>Sadržaj</h5></div>
+        <div class="card-body">
+          <pre class="bg-light p-3 rounded"><%= JSON.stringify(post.sadrzaj, null, 2) %></pre>
+          <!-- U realnoj aplikaciji ovde bi se renderovao HTML, ali za admin je ok prikazati strukturu -->
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <% if (post.faq && post.faq.length) { %>
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header bg-light"><h5>FAQ</h5></div>
+          <div class="card-body">
+            <% post.faq.forEach((item, idx) => { %>
+              <div class="mb-3">
+                <strong><%= item.pitanje %></strong>
+                <p><%= item.odgovor %></p>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- Vreme -->
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header bg-light"><h5>Vreme</h5></div>
+        <div class="card-body">
+          <dl class="row">
+            <dt class="col-sm-3">Kreiran</dt><dd class="col-sm-9"><%= post.vreme.kreiran %></dd>
+            <dt class="col-sm-3">Ažuriran</dt><dd class="col-sm-9"><%= post.vreme.azuriran %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../includes/end') %>

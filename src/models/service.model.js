@@ -276,7 +276,6 @@ serviceSchema.pre('save', function(next) {
  * INDEXI
  */
 serviceSchema.index({ type: 1, isActive: 1 });
-serviceSchema.index({ slug: 1 });
 serviceSchema.index({ categories: 1 });
 serviceSchema.index({ tags: 1 });
 
